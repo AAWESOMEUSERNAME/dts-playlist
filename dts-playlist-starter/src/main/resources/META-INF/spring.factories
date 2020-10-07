@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ com.gugu.dts.playlist.starter.autoconfig.PlayListStarterAutoConfiguration

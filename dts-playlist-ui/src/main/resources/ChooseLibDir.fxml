@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="118.0" prefWidth="253.0" xmlns="http://javafx.com/javafx/8" fx:controller="com.gugu.dts.playlist.ui.controller.ChooseLibDirController">
+   <children>
+      <GridPane layoutX="35.0" layoutY="35.0" prefHeight="105.0" prefWidth="233.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="111.0" minWidth="10.0" prefWidth="86.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="147.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="41.0" minHeight="10.0" prefHeight="41.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="51.0" minHeight="10.0" prefHeight="29.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="81.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="81.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="请输入库名：" />
+            <Label text="当前选择路径：" GridPane.rowIndex="1" />
+            <Label fx:id="lab_path" text="未选择" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="in_libName" prefHeight="23.0" prefWidth="97.0" GridPane.columnIndex="1" />
+            <Button mnemonicParsing="false" onMouseClicked="#chooseDir" text="选择文件夹" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Button mnemonicParsing="false" onMouseClicked="#confirm" text="确认" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>
