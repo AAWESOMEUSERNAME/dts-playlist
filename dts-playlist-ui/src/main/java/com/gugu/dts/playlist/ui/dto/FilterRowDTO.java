@@ -9,8 +9,6 @@ import javafx.beans.property.SimpleIntegerProperty;
  */
 public class FilterRowDTO {
 
-    public static final FilterRowDTO EMPTY_ROW = new FilterRowDTO(0.0,0.0,0);
-
     public static final String PROP_MIN = "bpmMin";
     public static final String PROP_MAX = "bpmMax";
     public static final String PROP_NUM = "songNum";
@@ -20,6 +18,10 @@ public class FilterRowDTO {
     private SimpleIntegerProperty songNum;
 
     public FilterRowDTO() {
+    }
+
+    public static FilterRowDTO emptyRow(){
+        return new FilterRowDTO(0.0,0.0,0);
     }
 
     public FilterRowDTO(Double bpmMin, Double bpmMax, Integer songNum) {

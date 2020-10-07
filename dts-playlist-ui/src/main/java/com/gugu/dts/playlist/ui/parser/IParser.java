@@ -8,5 +8,10 @@ import java.util.Optional;
  * @date 2020/9/29
  */
 public interface IParser {
+
+
+    String[] SUPPORTED = {"mp3","wma","flac"};
+
+
     Optional<IMusicFile> parse(File file);
 }

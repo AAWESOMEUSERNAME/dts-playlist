@@ -6,6 +6,7 @@ import de.felixroske.jfxsupport.AbstractJavaFxApplicationSupport;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 /**
  * @author chenyiyang
@@ -13,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 @Slf4j
+@EnableConfigurationProperties(AppProperties.class)
 public class PlayListGeneratorApp extends AbstractJavaFxApplicationSupport {
 
     public static void main(String[] args) {

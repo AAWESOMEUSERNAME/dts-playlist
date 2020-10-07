@@ -3,6 +3,7 @@ package com.gugu.dts.playlist.ui.usecase;
 import com.gugu.dts.playlist.api.ICommander;
 import com.gugu.dts.playlist.api.IQuery;
 import com.gugu.dts.playlist.api.object.*;
+import com.gugu.dts.playlist.ui.AppProperties;
 import com.gugu.dts.playlist.ui.dto.LibRowDTO;
 import com.gugu.dts.playlist.ui.parser.IMusicFile;
 import com.gugu.dts.playlist.ui.parser.IParser;
@@ -13,10 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Stack;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,11 +29,13 @@ public class MusicLibUsecase {
     private MusicParserFactory musicParserFactory;
     private ICommander commander;
     private IQuery query;
+    private AppProperties appProperties;
 
-    public MusicLibUsecase(MusicParserFactory musicParserFactory, ICommander commander, IQuery query) {
+    public MusicLibUsecase(MusicParserFactory musicParserFactory, ICommander commander, IQuery query, AppProperties appProperties) {
         this.musicParserFactory = musicParserFactory;
         this.commander = commander;
         this.query = query;
+        this.appProperties = appProperties;
     }
 
     public List<LibRowDTO> load() {
@@ -43,29 +43,23 @@ public class MusicLibUsecase {
         return query.listLibrary().stream().map(iMusicLibrary ->
                 new LibRowDTO(iMusicLibrary.getId(), format.format(iMusicLibrary.getCreateAt()), iMusicLibrary.getPath(), iMusicLibrary.getName())
         ).collect(Collectors.toList());
-//        return Stream.of(
-//                new LibRowDTO(1, "time1", "path", "name1"),
-//                new LibRowDTO(2, "time2", "path", "name2"),
-//                new LibRowDTO(3, "time3", "path", "name3"),
-//                new LibRowDTO(4, "time4", "path", "name4")
-//        ).collect(Collectors.toList());
     }
 
     @Transactional
     public void importLib(File root, String name) {
-        Stack<File> stack = new Stack<>();
-        stack.push(root);
+        LinkedList<File> list = new LinkedList<>();
+        list.addLast(root);
 
         ArrayList<IMusicFile> songs = new ArrayList<>();
-        while (!stack.empty()) {
-            File file = stack.pop();
+        while (list.size() > 0) {
+            File file = list.pollFirst();
             if (file.isDirectory()) {
-                File[] files = root.listFiles();
+                File[] files = file.listFiles();
                 if (files == null) {
                     continue;
                 }
-                Stream.of(files).forEach(stack::push);
-            } else {
+                Stream.of(files).forEach(list::addLast);
+            } else if (isSupported(file)) {
                 IParser parser = musicParserFactory.getParser();
                 Optional<IMusicFile> song = parser.parse(file);
                 song.ifPresent(songs::add);
@@ -110,6 +104,16 @@ public class MusicLibUsecase {
         });
     }
 
+    private boolean isSupported(File file) {
+        String fileName = file.getName();
+        for (String post : IParser.SUPPORTED) {
+            if (fileName.endsWith(post)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Transactional
     public void deleteLib(long currentLibId) {
         commander.deleteLibById(currentLibId);
@@ -117,11 +121,11 @@ public class MusicLibUsecase {
 
     public File generatePlayList(long currentLibId, IRuleDTO ruleDTO) {
         IMusicLibrary lib = query.fetchLibraryById(currentLibId);
-        if(lib == null){
-            throw new RuntimeException(String.format("没有查询到对应Id的musicLib，ID：%s",currentLibId));
+        if (lib == null) {
+            throw new RuntimeException(String.format("没有查询到对应Id的musicLib，ID：%s", currentLibId));
         }
         IRule rule = commander.createRule(ruleDTO);
         IPlayList iPlayList = rule.generatePlayList(lib);
-        return iPlayList.toFile("D:/default.m3u");
+        return iPlayList.toFile(appProperties.getOutPutFile());
     }
 }

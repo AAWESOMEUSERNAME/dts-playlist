@@ -10,6 +10,7 @@ import com.gugu.dts.playlist.ui.view.ChooseLibDirView;
 import de.felixroske.jfxsupport.FXMLController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -136,7 +137,7 @@ public class MainController implements Initializable {
 
     @FXML
     void addFilter(MouseEvent event) {
-        table_filter.getItems().add(FilterRowDTO.EMPTY_ROW);
+        table_filter.getItems().add(FilterRowDTO.emptyRow());
     }
 
     @FXML
@@ -168,6 +169,9 @@ public class MainController implements Initializable {
             if (newValue != null) {
                 lab_currentLib.setText(newValue.getName());
                 currentLibId = newValue.getId();
+            }else{
+                lab_currentLib.setText("未选择");
+                currentLibId = null;
             }
         });
     }
@@ -180,31 +184,16 @@ public class MainController implements Initializable {
     private void makeTableEditable() {
         table_filter.getSelectionModel().cellSelectionEnabledProperty().set(true);
         col_filter_bpmMin.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleToStringConverter()));
-        col_filter_bpmMin.setOnEditCommit(event -> {
-            Double newValue = event.getNewValue();
-            if (newValue < 0) {
-                AlertUtil.warn("bpm的值应该大于0");
-                return;
-            }
-
-            (event.getTableView().getItems().get(
-                    event.getTablePosition().getRow())
-            ).setBpmMin(newValue);
-        });
+        col_filter_bpmMin.setOnEditCommit(onEditBpmMin());
         col_filter_bpmMax.setCellFactory(TextFieldTableCell.forTableColumn(new DoubleToStringConverter()));
-        col_filter_bpmMax.setOnEditCommit(event -> {
-            Double newValue = event.getNewValue();
-            if (newValue < 0) {
-                AlertUtil.warn("bpm的值应该大于0");
-                return;
-            }
-
-            (event.getTableView().getItems().get(
-                    event.getTablePosition().getRow())
-            ).setBpmMax(newValue);
-        });
+        col_filter_bpmMax.setOnEditCommit(onEditBpmMax());
         col_filter_songNum.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerToStringConverter()));
-        col_filter_songNum.setOnEditCommit(event -> {
+        col_filter_songNum.setOnEditCommit(onEditSongNum());
+    }
+
+    @NotNull
+    private EventHandler<TableColumn.CellEditEvent<FilterRowDTO, Integer>> onEditSongNum() {
+        return event -> {
             Integer newValue = event.getNewValue();
             if (newValue < 0) {
                 AlertUtil.warn("歌曲数值应该大于0");
@@ -214,7 +203,35 @@ public class MainController implements Initializable {
             (event.getTableView().getItems().get(
                     event.getTablePosition().getRow())
             ).setSongNum(newValue);
-        });
+        };
+    }
+
+    @NotNull
+    private EventHandler<TableColumn.CellEditEvent<FilterRowDTO, Double>> onEditBpmMax() {
+        return event -> {
+            Double newValue = event.getNewValue();
+            if (newValue < 0) {
+                AlertUtil.warn("bpm的值应该大于0");
+                return;
+            }
+            (event.getTableView().getItems().get(event.getTablePosition().getRow())
+            ).setBpmMax(newValue);
+        };
+    }
+
+    @NotNull
+    private EventHandler<TableColumn.CellEditEvent<FilterRowDTO, Double>> onEditBpmMin() {
+        return event -> {
+            Double newValue = event.getNewValue();
+            if (newValue < 0) {
+                AlertUtil.warn("bpm的值应该大于0");
+                return;
+            }
+
+            (event.getTableView().getItems().get(
+                    event.getTablePosition().getRow())
+            ).setBpmMin(newValue);
+        };
     }
 
     private void initCellValueFactory() {
