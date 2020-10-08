@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 import org.springframework.boot.jdbc.DataSourceBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import java.util.logging.Level
+import java.util.logging.Logger
 import javax.sql.DataSource
 
 
@@ -16,9 +18,13 @@ class PlayListDataSourceAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(DataSource::class)
     fun dataSource(): DataSource {
+        val logger = Logger.getLogger("app")
+
+        val path = System.getProperty("user.dir") + "/dts-playlist.db"
+        logger.log(Level.INFO, "db path = $path")
 
         val builder = DataSourceBuilder.create()
-        builder.url("jdbc:sqlite:" + ClassLoader.getSystemResource("db/dts-playlist.db").path)
+        builder.url("jdbc:sqlite:$path")
         return builder.build()
     }
 }
