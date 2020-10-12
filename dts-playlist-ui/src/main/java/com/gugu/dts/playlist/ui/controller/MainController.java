@@ -80,6 +80,14 @@ public class MainController implements Initializable {
     }
 
     @FXML
+    void showMusicList(MouseEvent event) {
+        if (currentLibId == null) {
+            AlertUtil.warn("请选择一个音乐库");
+            return;
+        }
+    }
+
+    @FXML
     void generatePlaylist(MouseEvent event) {
         ObservableList<FilterRowDTO> filters = table_filter.getItems();
 

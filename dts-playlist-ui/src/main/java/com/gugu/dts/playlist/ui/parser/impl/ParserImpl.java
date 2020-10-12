@@ -5,12 +5,19 @@ import com.gugu.dts.playlist.ui.parser.IParser;
 import lombok.extern.slf4j.Slf4j;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
+import org.jaudiotagger.tag.TagException;
+import org.jaudiotagger.tag.TagField;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
 import java.util.Optional;
 
 /**
@@ -50,6 +57,18 @@ public class ParserImpl implements IParser {
         } catch (Exception e) {
             log.error(String.format("error parse file %s",file.getAbsolutePath()),e);
             return Optional.empty();
+        }
+    }
+
+
+    public static void main(String[] args) throws TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException, IOException {
+        File file = new File("D:\\Data\\music\\09-05. Hop Skip And Jump.mp3");
+        AudioFile f = AudioFileIO.read(file);
+        System.out.println("BPM: " + f.getTag().getFirst(FieldKey.BPM));
+        Iterator<TagField> fields = f.getTag().getFields();
+        for (Iterator<TagField> it = fields; it.hasNext(); ) {
+            TagField field = it.next();
+            System.out.println("id: "+ field.getId() + " value:" + field);
         }
     }
 }
