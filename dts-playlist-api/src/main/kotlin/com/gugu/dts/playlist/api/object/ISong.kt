@@ -5,5 +5,10 @@ interface ISong {
     val path: String
     val usedTimes: Int
     val bpm: Double?
+
+    /**
+     * 播放时长（s）
+     */
+    val trackLength: Int
     val id: Int?
 }

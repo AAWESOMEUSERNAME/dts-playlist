@@ -65,7 +65,8 @@ class MusicLibraryRepositoryImpl(
                 id = entity.id,
                 name = entity.name,
                 path = entity.path,
-                bpm = entity.bpm
+                bpm = entity.bpm,
+                trackLength = entity.trackLength
         )
     }
 
@@ -81,6 +82,7 @@ class MusicLibraryRepositoryImpl(
         song.bpm = dto.bpm
         song.name = dto.name
         song.path = dto.path
+        song.trackLength = dto.trackLength
         return song
     }
 }

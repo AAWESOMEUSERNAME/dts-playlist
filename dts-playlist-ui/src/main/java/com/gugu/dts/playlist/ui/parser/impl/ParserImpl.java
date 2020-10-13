@@ -61,14 +61,16 @@ public class ParserImpl implements IParser {
     }
 
 
-    public static void main(String[] args) throws TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException, IOException {
-        File file = new File("D:\\Data\\music\\09-05. Hop Skip And Jump.mp3");
-        AudioFile f = AudioFileIO.read(file);
-        System.out.println("BPM: " + f.getTag().getFirst(FieldKey.BPM));
-        Iterator<TagField> fields = f.getTag().getFields();
-        for (Iterator<TagField> it = fields; it.hasNext(); ) {
-            TagField field = it.next();
-            System.out.println("id: "+ field.getId() + " value:" + field);
-        }
-    }
+//    public static void main(String[] args) throws TagException, ReadOnlyFileException, CannotReadException, InvalidAudioFrameException, IOException {
+//        File file = new File("D:\\Data\\music\\09-05. Hop Skip And Jump.mp3");
+//        AudioFile f = AudioFileIO.read(file);
+//        int trackLength = f.getAudioHeader().getTrackLength();
+//        System.out.println("length : " + trackLength);
+//        System.out.println("BPM: " + f.getTag().getFirst(FieldKey.BPM));
+//        Iterator<TagField> fields = f.getTag().getFields();
+//        for (Iterator<TagField> it = fields; it.hasNext(); ) {
+//            TagField field = it.next();
+//            System.out.println("id: "+ field.getId() + " value:" + field);
+//        }
+//    }
 }

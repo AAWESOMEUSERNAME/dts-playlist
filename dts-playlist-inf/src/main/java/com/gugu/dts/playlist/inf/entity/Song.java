@@ -1,8 +1,11 @@
 package com.gugu.dts.playlist.inf.entity;
 
+import lombok.Data;
+
 /**
  * Table: song
  */
+@Data
 public class Song {
     /**
      * Column: id
@@ -34,51 +37,8 @@ public class Song {
      */
     private Integer libraryId;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name == null ? null : name.trim();
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path == null ? null : path.trim();
-    }
-
-    public Double getBpm() {
-        return bpm;
-    }
-
-    public void setBpm(Double bpm) {
-        this.bpm = bpm;
-    }
-
-    public Integer getUsedTimes() {
-        return usedTimes;
-    }
-
-    public void setUsedTimes(Integer usedTimes) {
-        this.usedTimes = usedTimes;
-    }
-
-    public Integer getLibraryId() {
-        return libraryId;
-    }
-
-    public void setLibraryId(Integer libraryId) {
-        this.libraryId = libraryId;
-    }
+    /**
+     * Column: track_length
+     */
+    private Integer trackLength;
 }

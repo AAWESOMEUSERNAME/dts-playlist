@@ -35,10 +35,10 @@ internal class CommanderTest {
                 "D:/test",
                 "test library",
                 listOf(
-                        SongDTOImpl("test1.mp3", "D:/test/test1.mp3", 100.0),
-                        SongDTOImpl("test2.mp3", "D:/test/test2.mp3", 110.0),
-                        SongDTOImpl("test3.mp3", "D:/test/test3.mp3", 120.0),
-                        SongDTOImpl("test4.mp3", "D:/test/test4.mp3", 130.0)
+                        SongDTOImpl("test1.mp3", "D:/test/test1.mp3", 100.0, 100),
+                        SongDTOImpl("test2.mp3", "D:/test/test2.mp3", 110.0, 100),
+                        SongDTOImpl("test3.mp3", "D:/test/test3.mp3", 120.0, 100),
+                        SongDTOImpl("test4.mp3", "D:/test/test4.mp3", 130.0, 100)
                 )
         ))
         assertNotNull(lib)
@@ -46,4 +46,4 @@ internal class CommanderTest {
 }
 
 private class LibraryDTOImpl(override val path: String, override val name: String, override val songs: List<ISongDTO>) : IMusicLibraryDTO
-private class SongDTOImpl(override val name: String, override val path: String, override val bpm: Double) : ISongDTO
+private class SongDTOImpl(override val name: String, override val path: String, override val bpm: Double, override val trackLength: Int) : ISongDTO

@@ -4,4 +4,5 @@ interface ISongDTO {
     val name: String
     val path: String
     val bpm: Double
+    val trackLength: Int
 }
