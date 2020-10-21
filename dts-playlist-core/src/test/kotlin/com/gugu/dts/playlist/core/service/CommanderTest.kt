@@ -43,6 +43,12 @@ internal class CommanderTest {
         ))
         assertNotNull(lib)
     }
+
+    @Test
+    fun createRule(){
+
+    }
+
 }
 
 private class LibraryDTOImpl(override val path: String, override val name: String, override val songs: List<ISongDTO>) : IMusicLibraryDTO
