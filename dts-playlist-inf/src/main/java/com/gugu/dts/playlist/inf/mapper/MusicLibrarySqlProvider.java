@@ -28,6 +28,10 @@ public class MusicLibrarySqlProvider {
             sql.VALUES("create_at", "#{createAt,jdbcType=VARCHAR}");
         }
         
+        if (record.getUpdateAt() != null) {
+            sql.VALUES("update_at", "#{updateAt,jdbcType=VARCHAR}");
+        }
+        
         return sql.toString();
     }
 
@@ -48,6 +52,10 @@ public class MusicLibrarySqlProvider {
         
         if (record.getCreateAt() != null) {
             sql.SET("create_at = #{createAt,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getUpdateAt() != null) {
+            sql.SET("update_at = #{updateAt,jdbcType=VARCHAR}");
         }
         
         sql.WHERE("id = #{id,jdbcType=INTEGER}");

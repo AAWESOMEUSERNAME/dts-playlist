@@ -41,4 +41,19 @@ public class Song {
      * Column: track_length
      */
     private Integer trackLength;
+
+    /**
+     * Column: artist
+     */
+    private String artist;
+
+    /**
+     * Column: create_at
+     */
+    private String createAt;
+
+    /**
+     * Column: update_at
+     */
+    private String updateAt;
 }

@@ -25,7 +25,7 @@ public interface SongMapper {
     /**
      * @mbg.generated generated automatically, do not modify!
      */
-    @Insert({ "insert into song (id, `name`, ", "`path`, bpm, used_times, ", "library_id, track_length)", "values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, ", "#{path,jdbcType=VARCHAR}, #{bpm,jdbcType=FLOAT}, #{usedTimes,jdbcType=INTEGER}, ", "#{libraryId,jdbcType=INTEGER}, #{trackLength,jdbcType=INTEGER})" })
+    @Insert({ "insert into song (id, `name`, ", "`path`, bpm, used_times, ", "library_id, track_length, ", "artist, create_at, ", "update_at)", "values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, ", "#{path,jdbcType=VARCHAR}, #{bpm,jdbcType=FLOAT}, #{usedTimes,jdbcType=INTEGER}, ", "#{libraryId,jdbcType=INTEGER}, #{trackLength,jdbcType=INTEGER}, ", "#{artist,jdbcType=VARCHAR}, #{createAt,jdbcType=VARCHAR}, ", "#{updateAt,jdbcType=VARCHAR})" })
     int insert(Song record);
 
     /**
@@ -37,8 +37,8 @@ public interface SongMapper {
     /**
      * @mbg.generated generated automatically, do not modify!
      */
-    @Select({ "select", "id, `name`, `path`, bpm, used_times, library_id, track_length", "from song", "where id = #{id,jdbcType=INTEGER}" })
-    @Results({ @Result(column = "id", property = "id", jdbcType = JdbcType.INTEGER, id = true), @Result(column = "name", property = "name", jdbcType = JdbcType.VARCHAR), @Result(column = "path", property = "path", jdbcType = JdbcType.VARCHAR), @Result(column = "bpm", property = "bpm", jdbcType = JdbcType.FLOAT), @Result(column = "used_times", property = "usedTimes", jdbcType = JdbcType.INTEGER), @Result(column = "library_id", property = "libraryId", jdbcType = JdbcType.INTEGER), @Result(column = "track_length", property = "trackLength", jdbcType = JdbcType.INTEGER) })
+    @Select({ "select", "id, `name`, `path`, bpm, used_times, library_id, track_length, artist, create_at, ", "update_at", "from song", "where id = #{id,jdbcType=INTEGER}" })
+    @Results({ @Result(column = "id", property = "id", jdbcType = JdbcType.INTEGER, id = true), @Result(column = "name", property = "name", jdbcType = JdbcType.VARCHAR), @Result(column = "path", property = "path", jdbcType = JdbcType.VARCHAR), @Result(column = "bpm", property = "bpm", jdbcType = JdbcType.FLOAT), @Result(column = "used_times", property = "usedTimes", jdbcType = JdbcType.INTEGER), @Result(column = "library_id", property = "libraryId", jdbcType = JdbcType.INTEGER), @Result(column = "track_length", property = "trackLength", jdbcType = JdbcType.INTEGER), @Result(column = "artist", property = "artist", jdbcType = JdbcType.VARCHAR), @Result(column = "create_at", property = "createAt", jdbcType = JdbcType.VARCHAR), @Result(column = "update_at", property = "updateAt", jdbcType = JdbcType.VARCHAR) })
     Song selectByPrimaryKey(Integer id);
 
     /**
@@ -50,7 +50,7 @@ public interface SongMapper {
     /**
      * @mbg.generated generated automatically, do not modify!
      */
-    @Update({ "update song", "set `name` = #{name,jdbcType=VARCHAR},", "`path` = #{path,jdbcType=VARCHAR},", "bpm = #{bpm,jdbcType=FLOAT},", "used_times = #{usedTimes,jdbcType=INTEGER},", "library_id = #{libraryId,jdbcType=INTEGER},", "track_length = #{trackLength,jdbcType=INTEGER}", "where id = #{id,jdbcType=INTEGER}" })
+    @Update({ "update song", "set `name` = #{name,jdbcType=VARCHAR},", "`path` = #{path,jdbcType=VARCHAR},", "bpm = #{bpm,jdbcType=FLOAT},", "used_times = #{usedTimes,jdbcType=INTEGER},", "library_id = #{libraryId,jdbcType=INTEGER},", "track_length = #{trackLength,jdbcType=INTEGER},", "artist = #{artist,jdbcType=VARCHAR},", "create_at = #{createAt,jdbcType=VARCHAR},", "update_at = #{updateAt,jdbcType=VARCHAR}", "where id = #{id,jdbcType=INTEGER}" })
     int updateByPrimaryKey(Song record);
 
     @Select({ "select", "id, `name`, `path`, bpm, used_times, library_id, track_length", "from song", "where library_id = #{id,jdbcType=INTEGER}" })

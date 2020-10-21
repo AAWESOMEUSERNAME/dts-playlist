@@ -40,6 +40,18 @@ public class SongSqlProvider {
             sql.VALUES("track_length", "#{trackLength,jdbcType=INTEGER}");
         }
         
+        if (record.getArtist() != null) {
+            sql.VALUES("artist", "#{artist,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getCreateAt() != null) {
+            sql.VALUES("create_at", "#{createAt,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getUpdateAt() != null) {
+            sql.VALUES("update_at", "#{updateAt,jdbcType=VARCHAR}");
+        }
+        
         return sql.toString();
     }
 
@@ -72,6 +84,18 @@ public class SongSqlProvider {
         
         if (record.getTrackLength() != null) {
             sql.SET("track_length = #{trackLength,jdbcType=INTEGER}");
+        }
+        
+        if (record.getArtist() != null) {
+            sql.SET("artist = #{artist,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getCreateAt() != null) {
+            sql.SET("create_at = #{createAt,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getUpdateAt() != null) {
+            sql.SET("update_at = #{updateAt,jdbcType=VARCHAR}");
         }
         
         sql.WHERE("id = #{id,jdbcType=INTEGER}");

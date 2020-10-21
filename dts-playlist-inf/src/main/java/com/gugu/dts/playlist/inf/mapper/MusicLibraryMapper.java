@@ -1,10 +1,16 @@
 package com.gugu.dts.playlist.inf.mapper;
 
 import com.gugu.dts.playlist.inf.entity.MusicLibrary;
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.Result;
+import org.apache.ibatis.annotations.Results;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.UpdateProvider;
 import org.apache.ibatis.type.JdbcType;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
 @Repository
@@ -19,21 +25,20 @@ public interface MusicLibraryMapper {
     /**
      * @mbg.generated generated automatically, do not modify!
      */
-    @Insert({ "insert into music_library (id, `name`, ", "`path`, create_at)", "values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, ", "#{path,jdbcType=VARCHAR}, #{createAt,jdbcType=VARCHAR})" })
+    @Insert({ "insert into music_library (id, `name`, ", "`path`, create_at, ", "update_at)", "values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, ", "#{path,jdbcType=VARCHAR}, #{createAt,jdbcType=VARCHAR}, ", "#{updateAt,jdbcType=VARCHAR})" })
     int insert(MusicLibrary record);
 
     /**
      * @mbg.generated generated automatically, do not modify!
      */
     @InsertProvider(type = MusicLibrarySqlProvider.class, method = "insertSelective")
-    @SelectKey(statement = "SELECT last_insert_rowid()", keyProperty = "id", before = false, resultType = int.class)
     int insertSelective(MusicLibrary record);
 
     /**
      * @mbg.generated generated automatically, do not modify!
      */
-    @Select({ "select", "id, `name`, `path`, create_at", "from music_library", "where id = #{id,jdbcType=INTEGER}" })
-    @Results({ @Result(column = "id", property = "id", jdbcType = JdbcType.INTEGER, id = true), @Result(column = "name", property = "name", jdbcType = JdbcType.VARCHAR), @Result(column = "path", property = "path", jdbcType = JdbcType.VARCHAR), @Result(column = "create_at", property = "createAt", jdbcType = JdbcType.VARCHAR) })
+    @Select({ "select", "id, `name`, `path`, create_at, update_at", "from music_library", "where id = #{id,jdbcType=INTEGER}" })
+    @Results({ @Result(column = "id", property = "id", jdbcType = JdbcType.INTEGER, id = true), @Result(column = "name", property = "name", jdbcType = JdbcType.VARCHAR), @Result(column = "path", property = "path", jdbcType = JdbcType.VARCHAR), @Result(column = "create_at", property = "createAt", jdbcType = JdbcType.VARCHAR), @Result(column = "update_at", property = "updateAt", jdbcType = JdbcType.VARCHAR) })
     MusicLibrary selectByPrimaryKey(Integer id);
 
     /**
@@ -45,7 +50,7 @@ public interface MusicLibraryMapper {
     /**
      * @mbg.generated generated automatically, do not modify!
      */
-    @Update({ "update music_library", "set `name` = #{name,jdbcType=VARCHAR},", "`path` = #{path,jdbcType=VARCHAR},", "create_at = #{createAt,jdbcType=VARCHAR}", "where id = #{id,jdbcType=INTEGER}" })
+    @Update({ "update music_library", "set `name` = #{name,jdbcType=VARCHAR},", "`path` = #{path,jdbcType=VARCHAR},", "create_at = #{createAt,jdbcType=VARCHAR},", "update_at = #{updateAt,jdbcType=VARCHAR}", "where id = #{id,jdbcType=INTEGER}" })
     int updateByPrimaryKey(MusicLibrary record);
 
     @Select({ "select", "id, `name`, `path`, create_at", "from music_library" })
