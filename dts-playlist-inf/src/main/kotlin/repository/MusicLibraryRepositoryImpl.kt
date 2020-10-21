@@ -83,6 +83,8 @@ class MusicLibraryRepositoryImpl(
         song.name = dto.name
         song.path = dto.path
         song.trackLength = dto.trackLength
+        song.artist = dto.artist
+        song.album = dto.album
         return song
     }
 }

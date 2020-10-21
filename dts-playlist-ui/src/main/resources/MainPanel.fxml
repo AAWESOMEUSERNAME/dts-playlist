@@ -40,8 +40,9 @@
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="465.0" minWidth="10.0" prefWidth="110.0" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="521.0" minWidth="0.0" prefWidth="88.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="521.0" minWidth="10.0" prefWidth="56.0" />
-                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="521.0" minWidth="10.0" prefWidth="413.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="521.0" minWidth="10.0" prefWidth="37.0" />
+                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="521.0" minWidth="10.0" prefWidth="272.0" />
+                  <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="521.0" minWidth="10.0" prefWidth="139.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -50,18 +51,16 @@
                   <Label text="共需要生成" />
                   <TextField fx:id="in_totalNum" prefHeight="23.0" prefWidth="78.0" GridPane.columnIndex="1" />
                   <Label text="首" GridPane.columnIndex="2" />
-                  <Button fx:id="btn_addFilter" mnemonicParsing="false" onMouseClicked="#addFilter" prefHeight="30.0" prefWidth="111.0" text="添加筛选器" GridPane.columnIndex="3" />
+                  <Button fx:id="btn_addFilter" mnemonicParsing="false" onMouseClicked="#addFilter" prefHeight="30.0" prefWidth="111.0" text="添加筛选器" GridPane.columnIndex="4" />
+                  <Button fx:id="btn_addFilter1" mnemonicParsing="false" onMouseClicked="#deleteFilter" prefHeight="30.0" prefWidth="111.0" text="删除筛选器" GridPane.columnIndex="3" />
                </children>
             </GridPane>
             <ScrollPane prefHeight="173.0" prefViewportHeight="53.0" prefViewportWidth="611.0" prefWidth="613.0">
                <content>
                   <TableView fx:id="table_filter" editable="true" maxHeight="1.7976931348623157E308" prefHeight="171.0" prefWidth="611.0">
                     <columns>
-                      <TableColumn fx:id="col_filter_bpmMin" prefWidth="44.0" text="bpm最小值（包含）" />
-                        <TableColumn fx:id="col_filter_bpmMax" prefWidth="67.0" text="bpm最大值（不包含）" />
-                        <TableColumn prefWidth="75.0" text="Column X" />
-                        <TableColumn prefWidth="75.0" text="Column X" />
-                        <TableColumn fx:id="col_filter_songNum" prefWidth="44.0" text="歌曲数量" />
+                        <TableColumn fx:id="col_filter_songNum" prefWidth="117.0" text="歌曲数量" />
+                        <TableColumn fx:id="col_filter_condition" editable="false" prefWidth="493.0" resizable="false" text="过滤条件" />
                     </columns>
                   </TableView>
                </content>
@@ -86,12 +85,12 @@
             </GridPane>
             <ScrollPane prefHeight="253.0" prefViewportHeight="288.0" prefViewportWidth="613.0" prefWidth="615.0">
                <content>
-                  <TableView fx:id="table_musicLib" prefHeight="288.0" prefWidth="613.0">
+                  <TableView fx:id="table_musicLib" prefHeight="251.0" prefWidth="613.0">
                     <columns>
                         <TableColumn fx:id="col_musicLib_id" prefWidth="75.0" text="id" />
                       <TableColumn fx:id="col_musicLib_libName" prefWidth="75.0" text="库名" />
                       <TableColumn fx:id="col_musicLib_importTime" prefWidth="128.0" text="导入时间" />
-                        <TableColumn fx:id="col_musicLib_path" prefWidth="409.0" text="路径" />
+                        <TableColumn fx:id="col_musicLib_path" prefWidth="334.0" text="路径" />
                     </columns>
                   </TableView>
                </content>

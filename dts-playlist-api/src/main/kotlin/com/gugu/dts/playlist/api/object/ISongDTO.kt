@@ -5,5 +5,6 @@ interface ISongDTO {
     val path: String
     val bpm: Double
     val artist: String?
+    val album: String?
     val trackLength: Int
 }

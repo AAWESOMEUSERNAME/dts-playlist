@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gugu.dts.playlist.ui.controller.LibSongsController">
+   <children>
+      <TableView fx:id="table_songs" prefHeight="400.0" prefWidth="600.0">
+        <columns>
+          <TableColumn prefWidth="29.0" text="id" />
+          <TableColumn prefWidth="146.0" text="歌曲名" />
+            <TableColumn prefWidth="125.0" text="表演者" />
+            <TableColumn prefWidth="38.0" text="bpm" />
+            <TableColumn prefWidth="42.0" text="时长" />
+            <TableColumn prefWidth="219.0" text="路径" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

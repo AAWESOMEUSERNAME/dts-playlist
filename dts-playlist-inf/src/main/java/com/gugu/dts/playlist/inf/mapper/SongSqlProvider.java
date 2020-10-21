@@ -52,6 +52,10 @@ public class SongSqlProvider {
             sql.VALUES("update_at", "#{updateAt,jdbcType=VARCHAR}");
         }
         
+        if (record.getAlbum() != null) {
+            sql.VALUES("album", "#{album,jdbcType=VARCHAR}");
+        }
+        
         return sql.toString();
     }
 
@@ -96,6 +100,10 @@ public class SongSqlProvider {
         
         if (record.getUpdateAt() != null) {
             sql.SET("update_at = #{updateAt,jdbcType=VARCHAR}");
+        }
+        
+        if (record.getAlbum() != null) {
+            sql.SET("album = #{album,jdbcType=VARCHAR}");
         }
         
         sql.WHERE("id = #{id,jdbcType=INTEGER}");

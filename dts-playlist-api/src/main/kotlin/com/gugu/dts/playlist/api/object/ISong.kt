@@ -6,6 +6,7 @@ interface ISong {
     val usedTimes: Int
     val bpm: Double?
     val artist: String?
+    val album: String?
 
     /**
      * 播放时长（s）

@@ -18,6 +18,7 @@ import org.springframework.util.StringUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -30,18 +31,21 @@ public class ParserImpl implements IParser {
     @Override
     public Optional<IMusicFile> parse(File file) {
         try {
-            log.debug("parsing file: {}",file.getName());
+            log.debug("parsing file: {}", file.getName());
             AudioFile f = AudioFileIO.read(file);
             Tag tag = f.getTag();
+            List<TagField> artists = tag.getFields(FieldKey.ARTIST);
+            String album = tag.getFirst(FieldKey.ALBUM);
+            int trackLength = f.getAudioHeader().getTrackLength();
             String bpm = tag.getFirst(FieldKey.BPM);
-            log.debug("parsing file BPM: {}",bpm);
-            if(StringUtils.isEmpty(bpm)){
+            log.debug("parsing file BPM: {}", bpm);
+            if (StringUtils.isEmpty(bpm)) {
                 log.warn("--------- file BPM is empty! ---------");
             }
             return Optional.of(new IMusicFile() {
                 @Override
                 public double bpm() {
-                    return StringUtils.isEmpty(bpm) ?0.0:Double.parseDouble(bpm);
+                    return StringUtils.isEmpty(bpm) ? 0.0 : Double.parseDouble(bpm);
                 }
 
                 @Override
@@ -53,9 +57,23 @@ public class ParserImpl implements IParser {
                 public String path() {
                     return file.getAbsolutePath();
                 }
+
+                @Override
+                public String artist() {
+                    return artists.stream().map(TagField::toString).reduce("", (s, s2) -> s + s2);
+                }
+                @Override
+                public String album() {
+                    return album;
+                }
+
+                @Override
+                public int trackLength() {
+                    return trackLength;
+                }
             });
         } catch (Exception e) {
-            log.error(String.format("error parse file %s",file.getAbsolutePath()),e);
+            log.error(String.format("error parse file %s", file.getAbsolutePath()), e);
             return Optional.empty();
         }
     }
@@ -67,10 +85,12 @@ public class ParserImpl implements IParser {
 //        int trackLength = f.getAudioHeader().getTrackLength();
 //        System.out.println("length : " + trackLength);
 //        System.out.println("BPM: " + f.getTag().getFirst(FieldKey.BPM));
+//        System.out.println("artist:" + f.getTag().getFields(FieldKey.ARTIST));
+//        System.out.println("artists: " + f.getTag().getFields(FieldKey.ARTISTS));
 //        Iterator<TagField> fields = f.getTag().getFields();
 //        for (Iterator<TagField> it = fields; it.hasNext(); ) {
 //            TagField field = it.next();
-//            System.out.println("id: "+ field.getId() + " value:" + field);
+//            System.out.println("id: " + field.getId() + " value:" + field);
 //        }
 //    }
 }

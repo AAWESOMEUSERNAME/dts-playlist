@@ -52,4 +52,4 @@ internal class CommanderTest {
 }
 
 private class LibraryDTOImpl(override val path: String, override val name: String, override val songs: List<ISongDTO>) : IMusicLibraryDTO
-private class SongDTOImpl(override val name: String, override val path: String, override val bpm: Double, override val trackLength: Int, override val artist: String = "default") : ISongDTO
+private class SongDTOImpl(override val name: String, override val path: String, override val bpm: Double, override val trackLength: Int, override val artist: String = "default", override val album: String? = null) : ISongDTO

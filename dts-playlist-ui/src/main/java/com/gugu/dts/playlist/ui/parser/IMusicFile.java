@@ -8,4 +8,7 @@ public interface IMusicFile {
     double bpm();
     String name();
     String path();
+    String artist();
+    int trackLength();
+    String album();
 }

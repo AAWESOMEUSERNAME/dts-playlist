@@ -2,6 +2,9 @@ package com.gugu.dts.playlist.ui.dto;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleStringProperty;
+import lombok.Data;
 
 /**
  * @author chenyiyang
@@ -9,60 +12,45 @@ import javafx.beans.property.SimpleIntegerProperty;
  */
 public class FilterRowDTO {
 
-    public static final String PROP_MIN = "bpmMin";
-    public static final String PROP_MAX = "bpmMax";
+    public static final String PROP_CONDITION = "condition";
     public static final String PROP_NUM = "songNum";
 
-    private SimpleDoubleProperty bpmMin;
-    private SimpleDoubleProperty bpmMax;
+    private SimpleStringProperty condition;
     private SimpleIntegerProperty songNum;
 
     public FilterRowDTO() {
     }
 
     public static FilterRowDTO emptyRow(){
-        return new FilterRowDTO(0.0,0.0,0);
+        return new FilterRowDTO("无",0);
     }
 
-    public FilterRowDTO(Double bpmMin, Double bpmMax, Integer songNum) {
-        this.bpmMin = new SimpleDoubleProperty(bpmMin);
-        this.bpmMax = new SimpleDoubleProperty(bpmMax);
+    public FilterRowDTO(String condition, Integer songNum) {
+        this.condition = new SimpleStringProperty(condition);
         this.songNum = new SimpleIntegerProperty(songNum);
     }
 
-    public double getBpmMin() {
-        return bpmMin.get();
+    public String getCondition() {
+        return condition.get();
     }
 
-    public void setBpmMin(double bpmMin) {
-        this.bpmMin.set(bpmMin);
+    public SimpleStringProperty conditionProperty() {
+        return condition;
     }
 
-    public SimpleDoubleProperty bpmMinProperty() {
-        return bpmMin;
-    }
-
-    public double getBpmMax() {
-        return bpmMax.get();
-    }
-
-    public void setBpmMax(double bpmMax) {
-        this.bpmMax.set(bpmMax);
-    }
-
-    public SimpleDoubleProperty bpmMaxProperty() {
-        return bpmMax;
+    public void setCondition(String condition) {
+        this.condition.set(condition);
     }
 
     public int getSongNum() {
         return songNum.get();
     }
 
-    public void setSongNum(int songNum) {
-        this.songNum.set(songNum);
-    }
-
     public SimpleIntegerProperty songNumProperty() {
         return songNum;
+    }
+
+    public void setSongNum(int songNum) {
+        this.songNum.set(songNum);
     }
 }

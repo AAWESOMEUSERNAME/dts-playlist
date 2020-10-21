@@ -8,6 +8,7 @@ data class Song(
         override val usedTimes: Int = 0,
         override val bpm: Double? = null,
         override val artist: String? = null,
+        override val album: String? = null,
         override val trackLength: Int = 0,
         override val id: Int? = null
 ) : ISong

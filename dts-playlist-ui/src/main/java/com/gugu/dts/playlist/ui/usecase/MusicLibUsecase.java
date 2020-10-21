@@ -5,10 +5,13 @@ import com.gugu.dts.playlist.api.IQuery;
 import com.gugu.dts.playlist.api.object.*;
 import com.gugu.dts.playlist.ui.AppProperties;
 import com.gugu.dts.playlist.ui.dto.LibRowDTO;
+import com.gugu.dts.playlist.ui.dto.SongsRowDTO;
 import com.gugu.dts.playlist.ui.parser.IMusicFile;
 import com.gugu.dts.playlist.ui.parser.IParser;
 import com.gugu.dts.playlist.ui.parser.MusicParserFactory;
+import com.gugu.dts.playlist.ui.utils.AlertUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +45,17 @@ public class MusicLibUsecase {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         return query.listLibrary().stream().map(iMusicLibrary ->
                 new LibRowDTO(iMusicLibrary.getId(), format.format(iMusicLibrary.getCreateAt()), iMusicLibrary.getPath(), iMusicLibrary.getName())
+        ).collect(Collectors.toList());
+    }
+
+    public List<SongsRowDTO> load(long libId){
+        IMusicLibrary library = query.fetchLibraryById(libId);
+        if(library == null){
+            AlertUtil.warn("选择的音乐库无效！id：" + libId);
+            return Collections.emptyList();
+        }
+        return library.getSongs().stream().map(iSong ->
+                new SongsRowDTO(iSong.getAlbum(),iSong.getBpm(),iSong.getArtist(),iSong.getId(),iSong.getTrackLength(),iSong.getPath(),iSong.getName())
         ).collect(Collectors.toList());
     }
 
@@ -98,6 +112,23 @@ public class MusicLibUsecase {
                     @Override
                     public double getBpm() {
                         return iMusicFile.bpm();
+                    }
+
+                    @Nullable
+                    @Override
+                    public String getArtist() {
+                        return iMusicFile.artist();
+                    }
+
+                    @Nullable
+                    @Override
+                    public String getAlbum() {
+                        return iMusicFile.album();
+                    }
+
+                    @Override
+                    public int getTrackLength() {
+                        return iMusicFile.trackLength();
                     }
                 }).collect(Collectors.toList());
             }
