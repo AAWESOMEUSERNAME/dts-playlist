@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gugu.dts.playlist.ui.controller.PlayListSongsController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gugu.dts.playlist.ui.controller.LibSongsController">
    <children>
       <TableView fx:id="table_songs" prefHeight="551.0" prefWidth="885.0">
         <columns>

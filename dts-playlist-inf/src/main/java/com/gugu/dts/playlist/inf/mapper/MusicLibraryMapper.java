@@ -1,14 +1,7 @@
 package com.gugu.dts.playlist.inf.mapper;
 
 import com.gugu.dts.playlist.inf.entity.MusicLibrary;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.InsertProvider;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
-import org.apache.ibatis.annotations.UpdateProvider;
+import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.type.JdbcType;
 import org.springframework.stereotype.Repository;
 import java.util.List;
@@ -32,6 +25,7 @@ public interface MusicLibraryMapper {
      * @mbg.generated generated automatically, do not modify!
      */
     @InsertProvider(type = MusicLibrarySqlProvider.class, method = "insertSelective")
+    @Options(useGeneratedKeys=true, keyProperty="id", keyColumn="id")
     int insertSelective(MusicLibrary record);
 
     /**

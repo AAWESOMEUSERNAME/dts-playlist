@@ -42,7 +42,9 @@ public class ChooseLibDirController implements Initializable {
     void chooseDir(MouseEvent event) {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         selectedDirectory = directoryChooser.showDialog(rootStage);
-        lab_path.setText(selectedDirectory.getAbsolutePath());
+        if(selectedDirectory != null){
+            lab_path.setText(selectedDirectory.getAbsolutePath());
+        }
     }
 
     @FXML

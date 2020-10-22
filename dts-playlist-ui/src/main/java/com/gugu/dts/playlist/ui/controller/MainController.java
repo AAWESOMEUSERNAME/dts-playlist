@@ -118,7 +118,10 @@ public class MainController implements Initializable {
     void addFilter(MouseEvent event) {
         table_filter.getItems().add(FilterRowDTO.emptyRow());
     }
+    @FXML
+    void deleteFilter(MouseEvent event) {
 
+    }
     @FXML
     void importLib(MouseEvent event) {
         if (chooseDirStage.isShowing()) {
