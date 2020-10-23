@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane prefHeight="250.0" prefWidth="559.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.gugu.dts.playlist.ui.controller.FilterGroupController">
+    <children>
+        <BorderPane prefHeight="250.0" prefWidth="559.0">
+            <center>
+                <GridPane prefHeight="243.0" prefWidth="387.0" BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="284.0" minHeight="10.0" prefHeight="181.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <TableView fx:id="table_filters" prefHeight="191.0" prefWidth="387.0">
+                            <columns>
+                                <TableColumn fx:id="col_property" prefWidth="151.0" text="筛选属性"/>
+                                <TableColumn fx:id="col_min" prefWidth="177.0" text="最小值（包含）"/>
+                                <TableColumn fx:id="col_max" prefWidth="210.0" text="最大值"/>
+                            </columns>
+                        </TableView>
+                    </children>
+                    <BorderPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0"/>
+                    </BorderPane.margin>
+                </GridPane>
+            </center>
+            <top>
+                <GridPane prefHeight="33.0" prefWidth="493.0" BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="103.0" minWidth="10.0" prefWidth="103.0"/>
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="115.0" minWidth="10.0"
+                                           prefWidth="49.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="225.0" minWidth="0.0" prefWidth="54.0"/>
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="133.0" minWidth="10.0"
+                                           prefWidth="50.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="72.0" minWidth="10.0" prefWidth="58.0"/>
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="161.0" minWidth="10.0"
+                                           prefWidth="161.0"/>
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="97.0" minWidth="10.0"
+                                           prefWidth="62.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <ChoiceBox fx:id="cob_property" prefHeight="23.0" prefWidth="106.0"/>
+                        <Label text="最小值" GridPane.columnIndex="1"/>
+                        <TextField fx:id="in_min" prefHeight="23.0" prefWidth="44.0" GridPane.columnIndex="2"/>
+                        <Label text="最大值" GridPane.columnIndex="3"/>
+                        <TextField fx:id="in_max" prefHeight="23.0" prefWidth="74.0" GridPane.columnIndex="4"/>
+                        <Button mnemonicParsing="false" onMouseClicked="#addFilter" text="添加" GridPane.columnIndex="5"/>
+                        <Button mnemonicParsing="false" onMouseClicked="#deleteFilter" text="删除"
+                                GridPane.columnIndex="6"/>
+                    </children>
+                    <BorderPane.margin>
+                        <Insets left="10.0" right="10.0" top="10.0"/>
+                    </BorderPane.margin>
+                </GridPane>
+            </top>
+            <bottom>
+                <GridPane BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="198.0" minWidth="10.0"
+                                           prefWidth="181.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="268.0" minWidth="10.0" prefWidth="47.0"/>
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="337.0" minWidth="10.0"
+                                           prefWidth="331.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <Label text="该组过滤器筛选出的数量："/>
+                        <TextField fx:id="in_sum" prefHeight="23.0" prefWidth="82.0" GridPane.columnIndex="1"/>
+                        <Button mnemonicParsing="false" onMouseClicked="#commit" prefHeight="27.0" prefWidth="69.0"
+                                text="提交" GridPane.columnIndex="2"/>
+                    </children>
+                    <BorderPane.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0"/>
+                    </BorderPane.margin>
+                </GridPane>
+            </bottom>
+        </BorderPane>
+    </children>
+</AnchorPane>

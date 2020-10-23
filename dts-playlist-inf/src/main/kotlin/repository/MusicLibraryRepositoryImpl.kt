@@ -45,6 +45,14 @@ class MusicLibraryRepositoryImpl(
         return libraryMapper.list().map { toModule(it)!! }
     }
 
+    override fun updateSongPlayedTimes(id: Long, newValue: Int) {
+        songMapper.updatePlayedTimes(id, newValue)
+    }
+
+    override fun resetPlayedTimes(libId: Long) {
+        songMapper.resetPlayedTimes(libId.toInt())
+    }
+
     private fun toModule(entity: com.gugu.dts.playlist.inf.entity.MusicLibrary?): MusicLibrary? {
         if (entity == null) {
             return null
@@ -66,7 +74,10 @@ class MusicLibraryRepositoryImpl(
                 name = entity.name,
                 path = entity.path,
                 bpm = entity.bpm,
-                trackLength = entity.trackLength
+                trackLength = entity.trackLength,
+                album = entity.album,
+                artist = entity.artist,
+                usedTimes = entity.usedTimes
         )
     }
 

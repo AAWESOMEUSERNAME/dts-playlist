@@ -4,10 +4,13 @@ import com.gugu.dts.playlist.api.`object`.*
 
 class Rule(
         override val filterGroups: List<Pair<Int, IFilterGroup>>,
-        override val total: Int
+        override val total: Int,
+        override val fairlyMod: Boolean = false
 ) : IRule {
     override fun generatePlayList(library: IMusicLibrary): IPlayList {
-        val results = filterGroups.map { it.first to it.second.filter(library.songs).toMutableList() }
+        val allSongs = library.songs
+
+        val results = filterGroups.map { it.first to it.second.filter(allSongs).toMutableList() }
         val playList = PlayList()
 
         var totalCount = 0
@@ -20,9 +23,24 @@ class Rule(
                 break
             }
 
+            val usedTimesArray = candidates.map { it.usedTimes }.toSet().toList().sorted().toIntArray()
             repeat(num) {
                 if (candidates.size > 0 && totalCount < total) {
-                    val song = candidates.random()
+
+                    var filteredCandidates = listOf<ISong>()
+
+                    if (fairlyMod) {
+                        for (i in usedTimesArray) {
+                            filteredCandidates = candidates.filter { it.usedTimes == i }
+                            if (filteredCandidates.isNotEmpty()) {
+                                break
+                            }
+                        }
+                    } else {
+                        filteredCandidates = candidates
+                    }
+
+                    val song = filteredCandidates.random()
                     playList.add(song)
                     candidates.remove(song)
                     totalCount++

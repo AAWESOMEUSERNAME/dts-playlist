@@ -48,14 +48,14 @@ public class MusicLibUsecase {
         ).collect(Collectors.toList());
     }
 
-    public List<SongsRowDTO> load(long libId){
+    public List<SongsRowDTO> load(long libId) {
         IMusicLibrary library = query.fetchLibraryById(libId);
-        if(library == null){
+        if (library == null) {
             AlertUtil.warn("选择的音乐库无效！id：" + libId);
             return Collections.emptyList();
         }
         return library.getSongs().stream().map(iSong ->
-                new SongsRowDTO(iSong.getAlbum(),iSong.getBpm(),iSong.getArtist(),iSong.getId(),iSong.getTrackLength(),iSong.getPath(),iSong.getName())
+                new SongsRowDTO(iSong.getAlbum(), iSong.getBpm(), iSong.getArtist(), iSong.getId(), iSong.getTrackLength(), iSong.getPath(), iSong.getName(), iSong.getUsedTimes())
         ).collect(Collectors.toList());
     }
 
@@ -158,5 +158,13 @@ public class MusicLibUsecase {
         IRule rule = commander.createRule(ruleDTO);
         IPlayList iPlayList = rule.generatePlayList(lib);
         return iPlayList.toFile(appProperties.getOutPutFile());
+    }
+
+    public void resetPlayTimes(Long libId) {
+        commander.resetLibPlayedTimes(libId);
+    }
+
+    public void updateSongPlayedTimes(long id, Integer newValue) {
+        commander.updateSongPlayedTimes(id, newValue);
     }
 }

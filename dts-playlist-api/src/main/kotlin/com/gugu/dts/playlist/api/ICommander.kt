@@ -9,4 +9,6 @@ interface ICommander {
 
     fun getIntervalFilter(min: Double, max: Double, provider: ISong.() -> Double): IntervalFilter
     fun createRule(dto: IRuleDTO): IRule
+    fun resetLibPlayedTimes(libId: Long)
+    fun updateSongPlayedTimes(id: Long, newValue: Int)
 }

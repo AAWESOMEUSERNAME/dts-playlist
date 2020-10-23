@@ -5,21 +5,15 @@ import com.gugu.dts.playlist.ui.parser.IParser;
 import lombok.extern.slf4j.Slf4j;
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.Tag;
-import org.jaudiotagger.tag.TagException;
-import org.jaudiotagger.tag.TagField;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author chenyiyang
@@ -34,7 +28,7 @@ public class ParserImpl implements IParser {
             log.debug("parsing file: {}", file.getName());
             AudioFile f = AudioFileIO.read(file);
             Tag tag = f.getTag();
-            List<TagField> artists = tag.getFields(FieldKey.ARTIST);
+            String artists = tag.getFirst(FieldKey.ARTIST);
             String album = tag.getFirst(FieldKey.ALBUM);
             int trackLength = f.getAudioHeader().getTrackLength();
             String bpm = tag.getFirst(FieldKey.BPM);
@@ -60,7 +54,12 @@ public class ParserImpl implements IParser {
 
                 @Override
                 public String artist() {
-                    return artists.stream().map(TagField::toString).reduce("", (s, s2) -> s + s2);
+                    //Text="The Four Vagabonds";
+                    Matcher matcher = Pattern.compile("^(Text=\")(?<value>.+)(\";)$").matcher(artists);
+                    if (matcher.find()) {
+                        return matcher.group("value");
+                    }
+                    return artists;
                 }
                 @Override
                 public String album() {

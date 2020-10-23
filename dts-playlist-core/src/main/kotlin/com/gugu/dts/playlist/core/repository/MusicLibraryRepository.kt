@@ -10,4 +10,6 @@ interface MusicLibraryRepository {
     fun list(): List<MusicLibrary>
     fun deleteLibById(currentLibId: Long)
     fun find(id: Long): IMusicLibrary?
+    fun resetPlayedTimes(libId: Long)
+    fun updateSongPlayedTimes(id: Long, newValue: Int)
 }

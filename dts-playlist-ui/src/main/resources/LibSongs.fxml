@@ -1,23 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.gugu.dts.playlist.ui.controller.LibSongsController">
    <children>
-      <TableView fx:id="table_songs" prefHeight="400.0" prefWidth="600.0">
-        <columns>
-          <TableColumn prefWidth="29.0" text="id" />
-          <TableColumn prefWidth="146.0" text="歌曲名" />
-            <TableColumn prefWidth="125.0" text="表演者" />
-            <TableColumn prefWidth="38.0" text="bpm" />
-            <TableColumn prefWidth="42.0" text="时长" />
-            <TableColumn prefWidth="219.0" text="路径" />
-        </columns>
-      </TableView>
+       <BorderPane prefHeight="527.0" prefWidth="894.0">
+           <center>
+               <TableView fx:id="table_songs" editable="true" prefHeight="497.0" prefWidth="865.0"
+                          BorderPane.alignment="CENTER">
+                   <columns>
+                       <TableColumn fx:id="col_id" prefWidth="29.0" text="id"/>
+                       <TableColumn fx:id="col_name" prefWidth="170.0" text="歌曲名"/>
+                       <TableColumn fx:id="col_artist" prefWidth="165.0" text="表演者"/>
+                       <TableColumn fx:id="col_album" prefWidth="145.0" text="专辑"/>
+                       <TableColumn fx:id="col_bpm" prefWidth="55.0" text="bpm"/>
+                       <TableColumn fx:id="col_playedTimes" prefWidth="55.0" text="使用次数"/>
+                       <TableColumn fx:id="col_length" prefWidth="41.0" text="时长"/>
+                       <TableColumn fx:id="col_path" prefWidth="233.0" text="路径"/>
+                   </columns>
+               </TableView>
+           </center>
+           <top>
+               <GridPane BorderPane.alignment="CENTER">
+                   <columnConstraints>
+                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="469.0" minWidth="10.0" prefWidth="301.0"/>
+                       <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="366.0" minWidth="10.0"
+                                          prefWidth="299.0"/>
+                   </columnConstraints>
+                   <rowConstraints>
+                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                   </rowConstraints>
+                   <children>
+                       <Button mnemonicParsing="false" onMouseClicked="#resetPlayedTimes" text="清除当前库所有使用次数">
+                           <GridPane.margin>
+                               <Insets left="20.0" right="20.0"/>
+                           </GridPane.margin>
+                       </Button>
+                   </children>
+               </GridPane>
+           </top>
+       </BorderPane>
    </children>
 </AnchorPane>

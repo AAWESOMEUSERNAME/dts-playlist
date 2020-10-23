@@ -2,7 +2,6 @@ package com.gugu.dts.playlist.ui.dto;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
@@ -18,6 +17,7 @@ public class SongsRowDTO {
     public static final String PROP_LENGTH = "length";
     public static final String PROP_PATH = "path";
     public static final String PROP_NAME = "name";
+    public static final String PROP_PLAYED_TIMES = "playedTimes";
 
     private SimpleStringProperty album;
 
@@ -33,7 +33,9 @@ public class SongsRowDTO {
 
     private SimpleStringProperty name;
 
-    public SongsRowDTO(String album, Double bpm, String artist, Integer id, Integer length, String path, String name) {
+    private SimpleIntegerProperty playedTimes;
+
+    public SongsRowDTO(String album, Double bpm, String artist, Integer id, Integer length, String path, String name, Integer playedTimes) {
         this.album = new SimpleStringProperty(album);
         this.bpm = new SimpleDoubleProperty(bpm);
         this.artist = new SimpleStringProperty(artist);
@@ -41,6 +43,7 @@ public class SongsRowDTO {
         this.length = new SimpleIntegerProperty(length);
         this.path = new SimpleStringProperty(path);
         this.name = new SimpleStringProperty(name);
+        this.playedTimes = new SimpleIntegerProperty(playedTimes);
     }
 
     public String getAlbum() {
@@ -125,5 +128,13 @@ public class SongsRowDTO {
 
     public void setName(String name) {
         this.name.set(name);
+    }
+
+    public int getPlayedTimes() {
+        return playedTimes.get();
+    }
+
+    public void setPlayedTimes(int playedTimes) {
+        this.playedTimes.set(playedTimes);
     }
 }

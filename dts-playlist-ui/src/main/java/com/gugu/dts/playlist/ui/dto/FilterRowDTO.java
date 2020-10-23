@@ -1,56 +1,59 @@
 package com.gugu.dts.playlist.ui.dto;
 
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
-import lombok.Data;
 
 /**
  * @author chenyiyang
- * @date 2020/9/28
+ * @date 2020/10/23
  */
 public class FilterRowDTO {
+    public static final String PROP_NAME = "propertyName";
+    public static final String PROP_MIN = "min";
+    public static final String PROP_MAX = "max";
 
-    public static final String PROP_CONDITION = "condition";
-    public static final String PROP_NUM = "songNum";
+    private SimpleStringProperty propertyName;
+    private SimpleStringProperty min;
+    private SimpleStringProperty max;
 
-    private SimpleStringProperty condition;
-    private SimpleIntegerProperty songNum;
-
-    public FilterRowDTO() {
+    public FilterRowDTO(String propertyName, String min, String max) {
+        this.propertyName = new SimpleStringProperty(propertyName);
+        this.min = new SimpleStringProperty(min);
+        this.max = new SimpleStringProperty(max);
     }
 
-    public static FilterRowDTO emptyRow(){
-        return new FilterRowDTO("无",0);
+    public String getPropertyName() {
+        return propertyName.get();
     }
 
-    public FilterRowDTO(String condition, Integer songNum) {
-        this.condition = new SimpleStringProperty(condition);
-        this.songNum = new SimpleIntegerProperty(songNum);
+    public SimpleStringProperty propertyNameProperty() {
+        return propertyName;
     }
 
-    public String getCondition() {
-        return condition.get();
+    public void setPropertyName(String propertyName) {
+        this.propertyName.set(propertyName);
     }
 
-    public SimpleStringProperty conditionProperty() {
-        return condition;
+    public String getMin() {
+        return min.get();
     }
 
-    public void setCondition(String condition) {
-        this.condition.set(condition);
+    public SimpleStringProperty minProperty() {
+        return min;
     }
 
-    public int getSongNum() {
-        return songNum.get();
+    public void setMin(String min) {
+        this.min.set(min);
     }
 
-    public SimpleIntegerProperty songNumProperty() {
-        return songNum;
+    public String getMax() {
+        return max.get();
     }
 
-    public void setSongNum(int songNum) {
-        this.songNum.set(songNum);
+    public SimpleStringProperty maxProperty() {
+        return max;
+    }
+
+    public void setMax(String max) {
+        this.max.set(max);
     }
 }

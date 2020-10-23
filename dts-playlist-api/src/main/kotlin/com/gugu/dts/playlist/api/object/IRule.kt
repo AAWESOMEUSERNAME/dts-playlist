@@ -10,5 +10,6 @@ interface IRule {
      * total numbers generated playlist should contains
      */
     val total: Int
+    val fairlyMod: Boolean
     fun generatePlayList(library: IMusicLibrary): IPlayList
 }

@@ -21,7 +21,15 @@ class Commander(private val libraryRepo: MusicLibraryRepository) : ICommander {
     override fun createRule(dto: IRuleDTO): IRule {
         return Rule(dto.filterGroups.map {
             it.first to toCore(it.second)
-        }, dto.total)
+        }, dto.total, dto.fairlyMode)
+    }
+
+    override fun resetLibPlayedTimes(libId: Long) {
+        libraryRepo.resetPlayedTimes(libId)
+    }
+
+    override fun updateSongPlayedTimes(id: Long, newValue: Int) {
+        libraryRepo.updateSongPlayedTimes(id, newValue)
     }
 
     override fun getIntervalFilter(min: Double, max: Double, provider: ISong.() -> Double): IntervalFilter {

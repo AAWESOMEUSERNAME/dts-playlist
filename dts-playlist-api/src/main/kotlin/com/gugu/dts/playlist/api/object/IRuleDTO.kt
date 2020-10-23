@@ -10,6 +10,11 @@ interface IRuleDTO {
      * total numbers generated playlist should contains
      */
     val total: Int
+
+    /**
+     * in this mod, songs less used will have higher priority to be chosen
+     */
+    val fairlyMode: Boolean
 }
 
 interface IFilterGroupDTO{
