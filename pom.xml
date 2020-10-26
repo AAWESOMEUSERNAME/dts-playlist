@@ -56,6 +56,11 @@
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>${mybatis.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.beust</groupId>
+                <artifactId>klaxon</artifactId>
+                <version>5.0.1</version>
+            </dependency>
 
             <!-- dts modules -->
             <dependency>

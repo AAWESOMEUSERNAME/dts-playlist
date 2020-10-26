@@ -3,7 +3,6 @@ package com.gugu.dts.playlist.ui.dto;
 import com.gugu.dts.playlist.api.object.IFilter;
 import com.gugu.dts.playlist.api.object.IFilterGroupDTO;
 import com.gugu.dts.playlist.api.object.IRuleDTO;
-import kotlin.Pair;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,14 +14,14 @@ import java.util.List;
  */
 @Builder
 public class RuleDTO implements IRuleDTO {
-    private List<Pair<Integer, IFilterGroupDTO>> filterGroups;
+    private List<IFilterGroupDTO> filterGroups;
     private int total;
     private boolean fairlyMode;
 
 
     @NotNull
     @Override
-    public List<Pair<Integer, IFilterGroupDTO>> getFilterGroups() {
+    public List<IFilterGroupDTO> getFilterGroups() {
         return filterGroups;
     }
 
@@ -40,6 +39,7 @@ public class RuleDTO implements IRuleDTO {
     public static class FilterGroupDTO implements IFilterGroupDTO {
         private List<IFilter> filters;
         private boolean logic;
+        private int sum;
 
         @NotNull
         @Override
@@ -50,6 +50,11 @@ public class RuleDTO implements IRuleDTO {
         @Override
         public boolean getLogic() {
             return logic;
+        }
+
+        @Override
+        public int getSum() {
+            return sum;
         }
     }
 

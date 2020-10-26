@@ -25,8 +25,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.gugu.dts.playlist.ui.controller.MainController.MainViewData.CURRENT_LIB_ID;
-import static com.gugu.dts.playlist.ui.controller.MainController.MainViewData.GROUPS;
+import static com.gugu.dts.playlist.ui.controller.MainController.MainViewData.*;
 import static de.felixroske.jfxsupport.AbstractJavaFxApplicationSupport.getStage;
 
 
@@ -137,7 +136,23 @@ public class MainController implements Initializable {
 
     @FXML
     void deleteFilter(MouseEvent event) {
-        refreshFilterGroups();
+        if (CURRENT_GROUP == null) {
+            AlertUtil.warn("请选择要删除的过滤器");
+            return;
+        }
+        boolean comfirm = AlertUtil.comfirm("确认删除这个过滤器么？");
+        if (comfirm) {
+            GROUPS.remove(CURRENT_GROUP);
+            refreshFilterGroups();
+        }
+    }
+
+    @FXML
+    void alterFilter(MouseEvent event) {
+        if (CURRENT_GROUP == null) {
+            AlertUtil.warn("请选择要编辑的过滤器");
+            return;
+        }
     }
 
     @FXML
@@ -180,6 +195,13 @@ public class MainController implements Initializable {
                 CURRENT_LIB_ID = null;
             }
         });
+        table_filter.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                CURRENT_GROUP = newValue;
+            } else {
+                CURRENT_LIB_ID = null;
+            }
+        });
     }
 
     private void initTableData() {
@@ -203,6 +225,7 @@ public class MainController implements Initializable {
 
     public static class MainViewData {
         public static Long CURRENT_LIB_ID;
+        public static FilterGroupRowDTO CURRENT_GROUP;
         public static List<FilterGroupRowDTO> GROUPS = new ArrayList<>();
     }
 }

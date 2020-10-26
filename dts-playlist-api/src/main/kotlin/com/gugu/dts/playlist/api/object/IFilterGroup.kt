@@ -12,5 +12,6 @@ interface IFilterGroup {
      */
     val logic: Boolean
 
+    val sum: Int
     fun filter(songs: List<ISong>): List<ISong>
 }

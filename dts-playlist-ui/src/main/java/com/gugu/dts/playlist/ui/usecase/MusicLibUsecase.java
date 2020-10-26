@@ -15,7 +15,6 @@ import com.gugu.dts.playlist.ui.parser.IMusicFile;
 import com.gugu.dts.playlist.ui.parser.IParser;
 import com.gugu.dts.playlist.ui.parser.MusicParserFactory;
 import com.gugu.dts.playlist.ui.utils.AlertUtil;
-import kotlin.Pair;
 import kotlin.jvm.functions.Function1;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -163,7 +162,7 @@ public class MusicLibUsecase {
             throw new RuntimeException(String.format("没有查询到对应Id的musicLib，ID：%s", currentLibId));
         }
 
-        List<Pair<Integer, IFilterGroupDTO>> groupDTOs = groups.stream().map(group -> {
+        List<IFilterGroupDTO> groupDTOs = groups.stream().map(group -> {
             int songNum = group.getSongNum();
             List<IFilter> filters = group.getFilters().stream().map(dto -> {
                 Function1<ISong, Double> provider = null;
@@ -176,8 +175,7 @@ public class MusicLibUsecase {
                 }
                 return commander.getIntervalFilter(dto.getMinD(), dto.getMaxD(), provider);
             }).collect(Collectors.toList());
-            FilterGroupDTO groupDTO = FilterGroupDTO.builder().filters(filters).logic(Logic.AND).build();
-            return new Pair<Integer, IFilterGroupDTO>(songNum, groupDTO);
+            return FilterGroupDTO.builder().filters(filters).logic(Logic.AND).sum(songNum).build();
         }).collect(Collectors.toList());
 
         RuleDTO ruleDTO = RuleDTO.builder().fairlyMode(fairly).total(total.intValue()).filterGroups(groupDTOs).build();

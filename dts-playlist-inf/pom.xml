@@ -28,5 +28,11 @@
             <artifactId>sqlite-jdbc</artifactId>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.beust</groupId>
+            <artifactId>klaxon</artifactId>
+            <!--            <scope>provided</scope>-->
+        </dependency>
     </dependencies>
 </project>

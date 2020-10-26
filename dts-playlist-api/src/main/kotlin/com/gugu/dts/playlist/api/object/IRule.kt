@@ -4,7 +4,7 @@ interface IRule {
     /**
      * Pair(how much songs should this group generate, this group)
      */
-    val filterGroups: List<Pair<Int, IFilterGroup>>
+    val filterGroups: List<IFilterGroup>
 
     /**
      * total numbers generated playlist should contains

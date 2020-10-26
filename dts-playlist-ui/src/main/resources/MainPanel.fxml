@@ -45,9 +45,11 @@
                         <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="521.0" minWidth="10.0"
                                            prefWidth="37.0"/>
                         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="521.0" minWidth="10.0"
-                                           prefWidth="272.0"/>
+                                           prefWidth="199.0"/>
                         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="521.0" minWidth="10.0"
-                                           prefWidth="139.0"/>
+                                           prefWidth="94.0"/>
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="521.0" minWidth="10.0"
+                                           prefWidth="96.0"/>
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
@@ -57,9 +59,11 @@
                         <TextField fx:id="in_totalNum" prefHeight="23.0" prefWidth="78.0" GridPane.columnIndex="1"/>
                         <Label text="首" GridPane.columnIndex="2"/>
                         <Button fx:id="btn_addFilter" mnemonicParsing="false" onMouseClicked="#addFilter"
-                                prefHeight="30.0" prefWidth="111.0" text="添加筛选器" GridPane.columnIndex="4"/>
+                                prefHeight="30.0" prefWidth="83.0" text="添加筛选器" GridPane.columnIndex="5"/>
                         <Button fx:id="btn_deleteFilter" mnemonicParsing="false" onMouseClicked="#deleteFilter"
-                                prefHeight="30.0" prefWidth="111.0" text="删除筛选器" GridPane.columnIndex="3"/>
+                                prefHeight="30.0" prefWidth="79.0" text="删除筛选器" GridPane.columnIndex="3"/>
+                        <Button fx:id="btn_alterFilter" mnemonicParsing="false" onMouseClicked="#alterFilter"
+                                prefHeight="30.0" prefWidth="80.0" text="编辑筛选器" GridPane.columnIndex="4"/>
                     </children>
                 </GridPane>
                 <ScrollPane prefHeight="173.0" prefViewportHeight="53.0" prefViewportWidth="611.0" prefWidth="613.0">
@@ -67,9 +71,10 @@
                         <TableView fx:id="table_filter" editable="true" maxHeight="1.7976931348623157E308"
                                    prefHeight="171.0" prefWidth="611.0">
                             <columns>
-                                <TableColumn fx:id="col_filter_songNum" prefWidth="117.0" text="歌曲数量"/>
-                                <TableColumn fx:id="col_filter_condition" editable="false" prefWidth="493.0"
-                                             resizable="false" text="过滤条件"/>
+                                <TableColumn fx:id="col_filter_condition" editable="false" prefWidth="435.0"
+                                             resizable="false" sortable="false" text="过滤条件"/>
+                                <TableColumn fx:id="col_filter_songNum" editable="false" prefWidth="175.0"
+                                             resizable="false" sortable="false" text="歌曲数量"/>
                             </columns>
                         </TableView>
                     </content>

@@ -4,7 +4,7 @@ interface IRuleDTO {
     /**
      * Pair(how much songs should this group generate, this group)
      */
-    val filterGroups: List<Pair<Int, IFilterGroupDTO>>
+    val filterGroups: List<IFilterGroupDTO>
 
     /**
      * total numbers generated playlist should contains
@@ -28,4 +28,6 @@ interface IFilterGroupDTO{
      * @see com.gugu.dts.playlist.api.constants.Logic
      */
     val logic: Boolean
+
+    val sum: Int
 }

@@ -6,8 +6,6 @@ import com.gugu.dts.playlist.core.entity.filters.IntervalFilterImpl
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.util.*
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 internal class RuleTest {
 
@@ -37,8 +35,8 @@ internal class RuleTest {
     fun test1() {
         val total = 5
         val filter = IntervalFilterImpl(100.0, 140.0, bpmProvider)
-        val group = FilterGroup(listOf(filter), Logic.AND)
-        val rule = Rule(listOf(2 to group), total)
+        val group = FilterGroup(listOf(filter), Logic.AND, 2)
+        val rule = Rule(listOf(group), total)
         val list = rule.generatePlayList(musicLibrary)
         val expact = ResultDTO(songs.filter { it.bpmProvider() >= 100.0 && it.bpmProvider() < 140.0 })
 
@@ -55,8 +53,8 @@ internal class RuleTest {
         val total = 5
         val filter1 = IntervalFilterImpl(100.0, 140.0, bpmProvider)
         val filter2 = IntervalFilterImpl(100.0, 150.0, lengthProvider)
-        val group = FilterGroup(listOf(filter1, filter2), Logic.AND)
-        val rule = Rule(listOf(2 to group), total)
+        val group = FilterGroup(listOf(filter1, filter2), Logic.AND, 2)
+        val rule = Rule(listOf(group), total)
         val list = rule.generatePlayList(musicLibrary)
 
         val expact = ResultDTO(songs.filter {
@@ -77,8 +75,8 @@ internal class RuleTest {
         val total = 5
         val filter1 = IntervalFilterImpl(100.0, 120.0, bpmProvider)
         val filter2 = IntervalFilterImpl(120.0, 150.0, bpmProvider)
-        val group = FilterGroup(listOf(filter1, filter2), Logic.OR)
-        val rule = Rule(listOf(2 to group), total)
+        val group = FilterGroup(listOf(filter1, filter2), Logic.OR, 2)
+        val rule = Rule(listOf(group), total)
         val list = rule.generatePlayList(musicLibrary)
 
         val expact = ResultDTO(songs.filter {
@@ -99,9 +97,9 @@ internal class RuleTest {
         val total = 5
         val filter1 = IntervalFilterImpl(100.0, 120.0, bpmProvider)
         val filter2 = IntervalFilterImpl(120.0, 150.0, bpmProvider)
-        val group1 = FilterGroup(listOf(filter1), Logic.AND)
-        val group2 = FilterGroup(listOf(filter2), Logic.AND)
-        val rule = Rule(listOf(2 to group1, 2 to group2), total)
+        val group1 = FilterGroup(listOf(filter1), Logic.AND, 2)
+        val group2 = FilterGroup(listOf(filter2), Logic.AND, 2)
+        val rule = Rule(listOf(group1, group2), total)
         val list = rule.generatePlayList(musicLibrary).songs
 
         assertTrue(list.size <= total)

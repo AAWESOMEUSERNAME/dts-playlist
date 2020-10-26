@@ -7,7 +7,8 @@ import com.gugu.dts.playlist.api.constants.Logic
 
 class FilterGroup(
         override val filters: List<IFilter>,
-        override val logic: Boolean
+        override val logic: Boolean,
+        override val sum: Int
 ) : IFilterGroup {
 
     override fun filter(songs: List<ISong>): List<ISong> {

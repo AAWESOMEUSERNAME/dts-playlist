@@ -3,14 +3,14 @@ package com.gugu.dts.playlist.core.entity
 import com.gugu.dts.playlist.api.`object`.*
 
 class Rule(
-        override val filterGroups: List<Pair<Int, IFilterGroup>>,
+        override val filterGroups: List<IFilterGroup>,
         override val total: Int,
         override val fairlyMod: Boolean = false
 ) : IRule {
     override fun generatePlayList(library: IMusicLibrary): IPlayList {
         val allSongs = library.songs
 
-        val results = filterGroups.map { it.first to it.second.filter(allSongs).toMutableList() }
+        val results = filterGroups.map { it.sum to it.filter(allSongs).toMutableList() }
         val playList = PlayList()
 
         var totalCount = 0
