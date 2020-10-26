@@ -19,12 +19,12 @@ class Rule(
             val num = results[filterCursor].first
             val candidates = results[filterCursor].second
 
-            if (candidates.size < num || num == 0) {
+            if (candidates.size == 0 || num == 0) {
                 break
             }
 
             val usedTimesArray = candidates.map { it.usedTimes }.toSet().toList().sorted().toIntArray()
-            repeat(num) {
+            repeat(if (candidates.size < num) candidates.size else num) {
                 if (candidates.size > 0 && totalCount < total) {
 
                     var filteredCandidates = listOf<ISong>()

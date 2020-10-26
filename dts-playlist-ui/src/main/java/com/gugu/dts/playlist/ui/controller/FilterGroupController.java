@@ -4,7 +4,7 @@ import com.gugu.dts.playlist.ui.constants.FilterablePropertyEnum;
 import com.gugu.dts.playlist.ui.dto.FilterGroupRowDTO;
 import com.gugu.dts.playlist.ui.dto.FilterRowDTO;
 import com.gugu.dts.playlist.ui.utils.AlertUtil;
-import com.gugu.dts.playlist.ui.utils.NumberUtil;
+import com.gugu.dts.playlist.ui.utils.GeneratorNumberUtils;
 import de.felixroske.jfxsupport.FXMLController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -76,10 +76,10 @@ public class FilterGroupController implements Initializable {
         boolean result = false;
         switch (FilterablePropertyEnum.ofProp(propertyName)) {
             case BPM:
-                result = validateBpm(min) && validateBpm(max);
+                result = validateBpm(min, max);
                 break;
             case TRACK_LENGTH:
-                result = validateLength(min) && validateLength(max);
+                result = validateLength(min, max);
                 break;
         }
         if (!result) {
@@ -90,21 +90,28 @@ public class FilterGroupController implements Initializable {
         refresh();
     }
 
-    private boolean validateBpm(String bpm) {
-        if (NumberUtil.isNotNumber(bpm)) {
-            AlertUtil.warn("bpm最小值只能是数字");
+    private boolean validateBpm(String min, String max) {
+        if (GeneratorNumberUtils.isNotNumber(min) || GeneratorNumberUtils.isNotNumber(max)) {
+            AlertUtil.warn("bpm只能是数字");
+            return false;
+        }
+        Double minD = GeneratorNumberUtils.toNumber(min);
+        Double maxD = GeneratorNumberUtils.toNumber(max);
+        if (minD.compareTo(maxD) > 0) {
+            AlertUtil.warn("最小值不能大于最大值");
             return false;
         }
         return true;
     }
 
-    private boolean validateLength(String length) {
-        if (NumberUtil.isNotFormatedDuration(length)) {
-            AlertUtil.warn("无效的长度，请按照 mm:ss 或 ss 的格式输入，如 4:30 代表音乐长度4分30秒, 50 代表音乐长度50秒");
+    private boolean validateLength(String min, String max) {
+        if (GeneratorNumberUtils.isNotFormatedDuration(min) || GeneratorNumberUtils.isNotFormatedDuration(max)) {
+            AlertUtil.warn("无效的长度，请按照 分:秒 或 秒 的格式输入，如 4:30 代表音乐长度4分30秒, 50 代表音乐长度50秒");
             return false;
         }
-        Map.Entry<Integer, Integer> minusAndSec = NumberUtil.extractFrom(length);
-        if (minusAndSec.getValue().compareTo(60) > 0) {
+        Map.Entry<Integer, Integer> minM = GeneratorNumberUtils.extractFrom(min);
+        Map.Entry<Integer, Integer> maxM = GeneratorNumberUtils.extractFrom(max);
+        if (minM.getValue().compareTo(60) > 0 || maxM.getValue().compareTo(60) > 0) {
             AlertUtil.warn("秒数不应大于60");
             return false;
         }
@@ -124,7 +131,7 @@ public class FilterGroupController implements Initializable {
     @FXML
     void commit(MouseEvent event) {
         String sum = in_sum.getText();
-        if (NumberUtil.isNotNumber(sum) || NumberUtils.parseNumber(sum, Integer.class).compareTo(0) <= 0) {
+        if (GeneratorNumberUtils.isNotNumber(sum) || NumberUtils.parseNumber(sum, Integer.class).compareTo(0) <= 0) {
             AlertUtil.warn("请输入有效的数量");
             return;
         }
@@ -137,7 +144,7 @@ public class FilterGroupController implements Initializable {
         }
         String condition = items.stream().map(it -> String.format("%s: [%s,%s)", it.getPropertyName(), it.getMin(), it.getMax())).reduce((s, s2) -> s + "," + s2).orElse("error");
         FilterGroupRowDTO groupRowDTO = new FilterGroupRowDTO(condition, SUM, items);
-        MainController.MainViewData.groups.add(groupRowDTO);
+        MainController.MainViewData.GROUPS.add(groupRowDTO);
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
     }

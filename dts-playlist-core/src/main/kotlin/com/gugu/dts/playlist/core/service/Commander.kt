@@ -24,6 +24,10 @@ class Commander(private val libraryRepo: MusicLibraryRepository) : ICommander {
         }, dto.total, dto.fairlyMode)
     }
 
+    override fun updateSongPlayedTimesByOne(ids: LongArray) {
+        libraryRepo.updateSongPlayedTimesByOne(ids)
+    }
+
     override fun resetLibPlayedTimes(libId: Long) {
         libraryRepo.resetPlayedTimes(libId)
     }

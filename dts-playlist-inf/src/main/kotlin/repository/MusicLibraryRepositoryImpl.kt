@@ -53,6 +53,10 @@ class MusicLibraryRepositoryImpl(
         songMapper.resetPlayedTimes(libId.toInt())
     }
 
+    override fun updateSongPlayedTimesByOne(ids: LongArray) {
+        songMapper.updatePlayedTimesByOne(ids)
+    }
+
     private fun toModule(entity: com.gugu.dts.playlist.inf.entity.MusicLibrary?): MusicLibrary? {
         if (entity == null) {
             return null

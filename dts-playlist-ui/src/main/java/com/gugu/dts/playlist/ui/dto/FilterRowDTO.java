@@ -1,5 +1,6 @@
 package com.gugu.dts.playlist.ui.dto;
 
+import com.gugu.dts.playlist.ui.utils.GeneratorNumberUtils;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
@@ -15,10 +16,23 @@ public class FilterRowDTO {
     private SimpleStringProperty min;
     private SimpleStringProperty max;
 
+    private double minD;
+    private double maxD;
+
     public FilterRowDTO(String propertyName, String min, String max) {
         this.propertyName = new SimpleStringProperty(propertyName);
         this.min = new SimpleStringProperty(min);
         this.max = new SimpleStringProperty(max);
+        this.minD = GeneratorNumberUtils.toNumber(min);
+        this.maxD = GeneratorNumberUtils.toNumber(max);
+    }
+
+    public double getMinD() {
+        return minD;
+    }
+
+    public double getMaxD() {
+        return maxD;
     }
 
     public String getPropertyName() {

@@ -11,4 +11,5 @@ interface ICommander {
     fun createRule(dto: IRuleDTO): IRule
     fun resetLibPlayedTimes(libId: Long)
     fun updateSongPlayedTimes(id: Long, newValue: Int)
+    fun updateSongPlayedTimesByOne(ids: LongArray)
 }

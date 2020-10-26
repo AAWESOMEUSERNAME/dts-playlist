@@ -12,4 +12,5 @@ interface MusicLibraryRepository {
     fun find(id: Long): IMusicLibrary?
     fun resetPlayedTimes(libId: Long)
     fun updateSongPlayedTimes(id: Long, newValue: Int)
+    fun updateSongPlayedTimesByOne(ids: LongArray)
 }

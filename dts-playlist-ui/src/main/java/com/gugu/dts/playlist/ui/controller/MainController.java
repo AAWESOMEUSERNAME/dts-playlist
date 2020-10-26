@@ -4,12 +4,12 @@ import com.gugu.dts.playlist.ui.dto.FilterGroupRowDTO;
 import com.gugu.dts.playlist.ui.dto.LibRowDTO;
 import com.gugu.dts.playlist.ui.usecase.MusicLibUsecase;
 import com.gugu.dts.playlist.ui.utils.AlertUtil;
+import com.gugu.dts.playlist.ui.utils.GeneratorNumberUtils;
 import com.gugu.dts.playlist.ui.view.ChooseLibDirView;
 import com.gugu.dts.playlist.ui.view.FilterGroupView;
 import com.gugu.dts.playlist.ui.view.LibSongsView;
 import de.felixroske.jfxsupport.FXMLController;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -18,14 +18,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.gugu.dts.playlist.ui.controller.MainController.MainViewData.currentLibId;
-import static com.gugu.dts.playlist.ui.controller.MainController.MainViewData.groups;
+import static com.gugu.dts.playlist.ui.controller.MainController.MainViewData.CURRENT_LIB_ID;
+import static com.gugu.dts.playlist.ui.controller.MainController.MainViewData.GROUPS;
 import static de.felixroske.jfxsupport.AbstractJavaFxApplicationSupport.getStage;
 
 
@@ -82,10 +83,10 @@ public class MainController implements Initializable {
 
     @FXML
     void showMusicList(MouseEvent event) {
-        if (currentLibId == null) {
+        if (CURRENT_LIB_ID == null) {
             AlertUtil.warn("请选择一个音乐库");
         }
-        LibSongsController.LibSongsViewData.libId = currentLibId;
+        LibSongsController.LibSongsViewData.libId = CURRENT_LIB_ID;
         if (libSongsStage.isShowing()) {
             libSongsStage.close();
         }
@@ -94,28 +95,31 @@ public class MainController implements Initializable {
 
     @FXML
     void generatePlaylist(MouseEvent event) {
-        ObservableList<FilterGroupRowDTO> filters = table_filter.getItems();
-
-        if (filters.size() == 0) {
+        if (GROUPS.size() == 0) {
             AlertUtil.warn("至少需要添加一个筛选器");
             return;
         }
-        if (currentLibId == null) {
+        if (CURRENT_LIB_ID == null) {
             AlertUtil.warn("请选择一个音乐库");
             return;
         }
-        cb_fairly.isSelected();
-        // todo
-//        File file = musicLibUsecase.generatePlayList(currentLibId, filters);
-//        AlertUtil.success("文件生成成功！路径：" + file.getAbsolutePath());
-        AlertUtil.success("文件生成成功！路径：");
+        String totalStr = in_totalNum.getText();
+        if (GeneratorNumberUtils.isNotNumber(totalStr)) {
+            AlertUtil.warn("请输入有效的需生成总量");
+            return;
+        }
+        Double total = GeneratorNumberUtils.toNumber(totalStr);
+        boolean fairly = cb_fairly.isSelected();
+
+        File file = musicLibUsecase.generatePlayList(CURRENT_LIB_ID, GROUPS, total, fairly);
+        AlertUtil.success("文件生成成功！路径：" + file.getAbsolutePath());
     }
 
     @FXML
     void deleteLib(MouseEvent event) {
         boolean comfirm = AlertUtil.comfirm("确认删除这个音乐库么？");
         if (comfirm) {
-            musicLibUsecase.deleteLib(currentLibId);
+            musicLibUsecase.deleteLib(CURRENT_LIB_ID);
             initTableData();
         }
     }
@@ -170,10 +174,10 @@ public class MainController implements Initializable {
         table_musicLib.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 lab_currentLib.setText(newValue.getName());
-                currentLibId = newValue.getId();
+                CURRENT_LIB_ID = newValue.getId();
             } else {
                 lab_currentLib.setText("未选择");
-                currentLibId = null;
+                CURRENT_LIB_ID = null;
             }
         });
     }
@@ -194,11 +198,11 @@ public class MainController implements Initializable {
     }
 
     public void refreshFilterGroups() {
-        table_filter.setItems(FXCollections.observableList(groups));
+        table_filter.setItems(FXCollections.observableList(GROUPS));
     }
 
     public static class MainViewData {
-        public static Long currentLibId;
-        public static List<FilterGroupRowDTO> groups = new ArrayList<>();
+        public static Long CURRENT_LIB_ID;
+        public static List<FilterGroupRowDTO> GROUPS = new ArrayList<>();
     }
 }

@@ -2,14 +2,21 @@ package com.gugu.dts.playlist.ui.usecase;
 
 import com.gugu.dts.playlist.api.ICommander;
 import com.gugu.dts.playlist.api.IQuery;
+import com.gugu.dts.playlist.api.constants.Logic;
 import com.gugu.dts.playlist.api.object.*;
 import com.gugu.dts.playlist.ui.AppProperties;
+import com.gugu.dts.playlist.ui.constants.FilterablePropertyEnum;
+import com.gugu.dts.playlist.ui.dto.FilterGroupRowDTO;
 import com.gugu.dts.playlist.ui.dto.LibRowDTO;
+import com.gugu.dts.playlist.ui.dto.RuleDTO;
+import com.gugu.dts.playlist.ui.dto.RuleDTO.FilterGroupDTO;
 import com.gugu.dts.playlist.ui.dto.SongsRowDTO;
 import com.gugu.dts.playlist.ui.parser.IMusicFile;
 import com.gugu.dts.playlist.ui.parser.IParser;
 import com.gugu.dts.playlist.ui.parser.MusicParserFactory;
 import com.gugu.dts.playlist.ui.utils.AlertUtil;
+import kotlin.Pair;
+import kotlin.jvm.functions.Function1;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
@@ -150,13 +157,33 @@ public class MusicLibUsecase {
         commander.deleteLibById(currentLibId);
     }
 
-    public File generatePlayList(long currentLibId, IRuleDTO ruleDTO) {
+    public File generatePlayList(long currentLibId, List<FilterGroupRowDTO> groups, Double total, boolean fairly) {
         IMusicLibrary lib = query.fetchLibraryById(currentLibId);
         if (lib == null) {
             throw new RuntimeException(String.format("没有查询到对应Id的musicLib，ID：%s", currentLibId));
         }
+
+        List<Pair<Integer, IFilterGroupDTO>> groupDTOs = groups.stream().map(group -> {
+            int songNum = group.getSongNum();
+            List<IFilter> filters = group.getFilters().stream().map(dto -> {
+                Function1<ISong, Double> provider = null;
+                switch (FilterablePropertyEnum.ofProp(dto.getPropertyName())) {
+                    case BPM:
+                        provider = ISong::getBpm;
+                        break;
+                    case TRACK_LENGTH:
+                        provider = iSong -> iSong.getTrackLength() + 0.0;
+                }
+                return commander.getIntervalFilter(dto.getMinD(), dto.getMaxD(), provider);
+            }).collect(Collectors.toList());
+            FilterGroupDTO groupDTO = FilterGroupDTO.builder().filters(filters).logic(Logic.AND).build();
+            return new Pair<Integer, IFilterGroupDTO>(songNum, groupDTO);
+        }).collect(Collectors.toList());
+
+        RuleDTO ruleDTO = RuleDTO.builder().fairlyMode(fairly).total(total.intValue()).filterGroups(groupDTOs).build();
         IRule rule = commander.createRule(ruleDTO);
         IPlayList iPlayList = rule.generatePlayList(lib);
+        commander.updateSongPlayedTimesByOne(iPlayList.getSongs().stream().mapToLong(it -> it.getId().longValue()).toArray());
         return iPlayList.toFile(appProperties.getOutPutFile());
     }
 
