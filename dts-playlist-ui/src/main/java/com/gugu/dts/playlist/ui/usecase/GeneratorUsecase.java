@@ -3,19 +3,16 @@ package com.gugu.dts.playlist.ui.usecase;
 import com.gugu.dts.playlist.api.ICommander;
 import com.gugu.dts.playlist.api.IQuery;
 import com.gugu.dts.playlist.api.constants.Logic;
+import com.gugu.dts.playlist.api.constants.PropertyProvider;
 import com.gugu.dts.playlist.api.object.*;
 import com.gugu.dts.playlist.ui.AppProperties;
 import com.gugu.dts.playlist.ui.constants.FilterablePropertyEnum;
-import com.gugu.dts.playlist.ui.dto.FilterGroupRowDTO;
-import com.gugu.dts.playlist.ui.dto.LibRowDTO;
-import com.gugu.dts.playlist.ui.dto.RuleDTO;
+import com.gugu.dts.playlist.ui.dto.*;
 import com.gugu.dts.playlist.ui.dto.RuleDTO.FilterGroupDTO;
-import com.gugu.dts.playlist.ui.dto.SongsRowDTO;
 import com.gugu.dts.playlist.ui.parser.IMusicFile;
 import com.gugu.dts.playlist.ui.parser.IParser;
 import com.gugu.dts.playlist.ui.parser.MusicParserFactory;
 import com.gugu.dts.playlist.ui.utils.AlertUtil;
-import kotlin.jvm.functions.Function1;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Component;
@@ -32,7 +29,7 @@ import java.util.stream.Stream;
  * @date 2020/9/29
  */
 @Component
-public class MusicLibUsecase {
+public class GeneratorUsecase {
 
 
     private MusicParserFactory musicParserFactory;
@@ -40,21 +37,21 @@ public class MusicLibUsecase {
     private IQuery query;
     private AppProperties appProperties;
 
-    public MusicLibUsecase(MusicParserFactory musicParserFactory, ICommander commander, IQuery query, AppProperties appProperties) {
+    public GeneratorUsecase(MusicParserFactory musicParserFactory, ICommander commander, IQuery query, AppProperties appProperties) {
         this.musicParserFactory = musicParserFactory;
         this.commander = commander;
         this.query = query;
         this.appProperties = appProperties;
     }
 
-    public List<LibRowDTO> load() {
+    public List<LibRowDTO> loadLib() {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         return query.listLibrary().stream().map(iMusicLibrary ->
                 new LibRowDTO(iMusicLibrary.getId(), format.format(iMusicLibrary.getCreateAt()), iMusicLibrary.getPath(), iMusicLibrary.getName())
         ).collect(Collectors.toList());
     }
 
-    public List<SongsRowDTO> load(long libId) {
+    public List<SongsRowDTO> loadLib(int libId) {
         IMusicLibrary library = query.fetchLibraryById(libId);
         if (library == null) {
             AlertUtil.warn("选择的音乐库无效！id：" + libId);
@@ -152,11 +149,11 @@ public class MusicLibUsecase {
     }
 
     @Transactional
-    public void deleteLib(long currentLibId) {
+    public void deleteLib(int currentLibId) {
         commander.deleteLibById(currentLibId);
     }
 
-    public File generatePlayList(long currentLibId, List<FilterGroupRowDTO> groups, Double total, boolean fairly) {
+    public File generatePlayList(int currentLibId, List<FilterGroupRowDTO> groups, Double total, boolean fairly) {
         IMusicLibrary lib = query.fetchLibraryById(currentLibId);
         if (lib == null) {
             throw new RuntimeException(String.format("没有查询到对应Id的musicLib，ID：%s", currentLibId));
@@ -165,13 +162,13 @@ public class MusicLibUsecase {
         List<IFilterGroupDTO> groupDTOs = groups.stream().map(group -> {
             int songNum = group.getSongNum();
             List<IFilter> filters = group.getFilters().stream().map(dto -> {
-                Function1<ISong, Double> provider = null;
+                PropertyProvider provider = null;
                 switch (FilterablePropertyEnum.ofProp(dto.getPropertyName())) {
                     case BPM:
-                        provider = ISong::getBpm;
+                        provider = PropertyProvider.BPM;
                         break;
                     case TRACK_LENGTH:
-                        provider = iSong -> iSong.getTrackLength() + 0.0;
+                        provider = PropertyProvider.LENGTH;
                 }
                 return commander.getIntervalFilter(dto.getMinD(), dto.getMaxD(), provider);
             }).collect(Collectors.toList());
@@ -185,11 +182,15 @@ public class MusicLibUsecase {
         return iPlayList.toFile(appProperties.getOutPutFile());
     }
 
-    public void resetPlayTimes(Long libId) {
+    public void resetPlayTimes(Integer libId) {
         commander.resetLibPlayedTimes(libId);
     }
 
     public void updateSongPlayedTimes(long id, Integer newValue) {
         commander.updateSongPlayedTimes(id, newValue);
+    }
+
+    public List<FilterRowDTO> loadGroups() {
+        return query.listFilterGroups();
     }
 }

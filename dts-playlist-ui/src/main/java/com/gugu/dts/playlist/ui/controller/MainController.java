@@ -2,7 +2,7 @@ package com.gugu.dts.playlist.ui.controller;
 
 import com.gugu.dts.playlist.ui.dto.FilterGroupRowDTO;
 import com.gugu.dts.playlist.ui.dto.LibRowDTO;
-import com.gugu.dts.playlist.ui.usecase.MusicLibUsecase;
+import com.gugu.dts.playlist.ui.usecase.GeneratorUsecase;
 import com.gugu.dts.playlist.ui.utils.AlertUtil;
 import com.gugu.dts.playlist.ui.utils.GeneratorNumberUtils;
 import com.gugu.dts.playlist.ui.view.ChooseLibDirView;
@@ -42,7 +42,7 @@ public class MainController implements Initializable {
     private Stage filterGroupStage;
 
     private LibSongsController libSongsController;
-    private MusicLibUsecase musicLibUsecase;
+    private GeneratorUsecase musicLibUsecase;
     private ChooseLibDirView chooseLibDirView;
     private LibSongsView playlistSongsView;
     private FilterGroupView filterGroupView;
@@ -57,7 +57,7 @@ public class MainController implements Initializable {
     @FXML
     private TableView<LibRowDTO> table_musicLib;
     @FXML
-    private TableColumn<LibRowDTO, Long> col_musicLib_id;
+    private TableColumn<LibRowDTO, Integer> col_musicLib_id;
     @FXML
     private TableColumn<LibRowDTO, Date> col_musicLib_importTime;
     @FXML
@@ -72,7 +72,7 @@ public class MainController implements Initializable {
     @FXML
     private TableColumn<FilterGroupRowDTO, String> col_filter_condition;
 
-    public MainController(LibSongsController libSongsController, MusicLibUsecase musicLibUsecase, ChooseLibDirView chooseLibDirView, LibSongsView playlistSongsView, FilterGroupView filterGroupView) {
+    public MainController(LibSongsController libSongsController, GeneratorUsecase musicLibUsecase, ChooseLibDirView chooseLibDirView, LibSongsView playlistSongsView, FilterGroupView filterGroupView) {
         this.libSongsController = libSongsController;
         this.musicLibUsecase = musicLibUsecase;
         this.chooseLibDirView = chooseLibDirView;
@@ -205,7 +205,7 @@ public class MainController implements Initializable {
     }
 
     private void initTableData() {
-        List<LibRowDTO> rows = musicLibUsecase.load();
+        List<LibRowDTO> rows = musicLibUsecase.loadLib();
         table_musicLib.setItems(FXCollections.observableList(rows));
     }
 
@@ -224,7 +224,7 @@ public class MainController implements Initializable {
     }
 
     public static class MainViewData {
-        public static Long CURRENT_LIB_ID;
+        public static Integer CURRENT_LIB_ID;
         public static FilterGroupRowDTO CURRENT_GROUP;
         public static List<FilterGroupRowDTO> GROUPS = new ArrayList<>();
     }

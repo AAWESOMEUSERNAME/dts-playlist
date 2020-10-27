@@ -1,6 +1,6 @@
 package com.gugu.dts.playlist.ui.controller;
 
-import com.gugu.dts.playlist.ui.usecase.MusicLibUsecase;
+import com.gugu.dts.playlist.ui.usecase.GeneratorUsecase;
 import com.gugu.dts.playlist.ui.utils.AlertUtil;
 import de.felixroske.jfxsupport.FXMLController;
 import javafx.fxml.FXML;
@@ -27,14 +27,14 @@ import static de.felixroske.jfxsupport.AbstractJavaFxApplicationSupport.getStage
 public class ChooseLibDirController implements Initializable {
 
     private Stage rootStage;
-    private MusicLibUsecase musicLibUsecase;
+    private GeneratorUsecase musicLibUsecase;
     @FXML
     private Label lab_path;
     @FXML
     private TextField in_libName;
     private File selectedDirectory;
 
-    public ChooseLibDirController(MusicLibUsecase musicLibUsecase) {
+    public ChooseLibDirController(GeneratorUsecase musicLibUsecase) {
         this.musicLibUsecase = musicLibUsecase;
     }
 

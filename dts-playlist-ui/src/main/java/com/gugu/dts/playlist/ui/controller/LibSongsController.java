@@ -1,7 +1,7 @@
 package com.gugu.dts.playlist.ui.controller;
 
 import com.gugu.dts.playlist.ui.dto.SongsRowDTO;
-import com.gugu.dts.playlist.ui.usecase.MusicLibUsecase;
+import com.gugu.dts.playlist.ui.usecase.GeneratorUsecase;
 import com.gugu.dts.playlist.ui.utils.AlertUtil;
 import de.felixroske.jfxsupport.FXMLController;
 import javafx.collections.FXCollections;
@@ -31,9 +31,9 @@ import static com.gugu.dts.playlist.ui.controller.LibSongsController.LibSongsVie
 @FXMLController
 public class LibSongsController implements Initializable, EventHandler<WindowEvent> {
 
-    private MusicLibUsecase musicLibUsecase;
+    private GeneratorUsecase musicLibUsecase;
 
-    public LibSongsController(MusicLibUsecase musicLibUsecase) {
+    public LibSongsController(GeneratorUsecase musicLibUsecase) {
         this.musicLibUsecase = musicLibUsecase;
     }
 
@@ -78,7 +78,7 @@ public class LibSongsController implements Initializable, EventHandler<WindowEve
     }
 
     private void initTableData() {
-        List<SongsRowDTO> rows = musicLibUsecase.load(libId);
+        List<SongsRowDTO> rows = musicLibUsecase.loadLib(libId);
         table_songs.setItems(FXCollections.observableList(rows));
     }
 
@@ -132,6 +132,7 @@ public class LibSongsController implements Initializable, EventHandler<WindowEve
 
 
     public static class LibSongsViewData{
-        @NotNull public static Long libId = -1L;
+        @NotNull
+        public static Integer libId = -1;
     }
 }

@@ -1,6 +1,6 @@
 package com.gugu.dts.playlist.ui.dto;
 
-import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
@@ -14,7 +14,7 @@ public class LibRowDTO {
     public static final String PROP_IMPORT_TIME = "importTime";
     public static final String PROP_PATH = "path";
 
-    private SimpleLongProperty id;
+    private SimpleIntegerProperty id;
     private SimpleStringProperty importTime;
     private SimpleStringProperty path;
     private SimpleStringProperty name;
@@ -23,21 +23,21 @@ public class LibRowDTO {
     }
 
     public LibRowDTO(Integer id, String importTime, String path, String name) {
-        this.id = new SimpleLongProperty(id);
+        this.id = new SimpleIntegerProperty(id);
         this.importTime = new SimpleStringProperty(importTime);
         this.path = new SimpleStringProperty(path);
         this.name = new SimpleStringProperty(name);
     }
 
-    public long getId() {
+    public int getId() {
         return id.get();
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id.set(id);
     }
 
-    public SimpleLongProperty idProperty() {
+    public SimpleIntegerProperty idProperty() {
         return id;
     }
 

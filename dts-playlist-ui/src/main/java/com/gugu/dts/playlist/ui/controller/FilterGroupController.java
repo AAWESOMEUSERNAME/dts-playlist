@@ -3,6 +3,7 @@ package com.gugu.dts.playlist.ui.controller;
 import com.gugu.dts.playlist.ui.constants.FilterablePropertyEnum;
 import com.gugu.dts.playlist.ui.dto.FilterGroupRowDTO;
 import com.gugu.dts.playlist.ui.dto.FilterRowDTO;
+import com.gugu.dts.playlist.ui.usecase.GeneratorUsecase;
 import com.gugu.dts.playlist.ui.utils.AlertUtil;
 import com.gugu.dts.playlist.ui.utils.GeneratorNumberUtils;
 import de.felixroske.jfxsupport.FXMLController;
@@ -19,7 +20,10 @@ import org.springframework.util.NumberUtils;
 import org.springframework.util.StringUtils;
 
 import java.net.URL;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 import static com.gugu.dts.playlist.ui.controller.FilterGroupController.FilterGroupData.FILTERS;
@@ -32,6 +36,12 @@ import static com.gugu.dts.playlist.ui.controller.FilterGroupController.FilterGr
 @FXMLController
 public class FilterGroupController implements Initializable {
 
+
+    private GeneratorUsecase usecase;
+
+    public FilterGroupController(GeneratorUsecase usecase) {
+        this.usecase = usecase;
+    }
 
     @FXML
     private ChoiceBox<String> cob_property;
@@ -153,24 +163,22 @@ public class FilterGroupController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         List<String> items = Arrays.stream(FilterablePropertyEnum.values()).map(FilterablePropertyEnum::getPropName).collect(Collectors.toList());
         cob_property.setItems(FXCollections.observableList(items));
-        in_sum.setText(SUM == null ? "" : SUM.toString());
+
 
         col_min.setCellValueFactory(new PropertyValueFactory<>(FilterRowDTO.PROP_MIN));
         col_max.setCellValueFactory(new PropertyValueFactory<>(FilterRowDTO.PROP_MAX));
         col_property.setCellValueFactory(new PropertyValueFactory<>(FilterRowDTO.PROP_NAME));
+
+        initTableData();
     }
 
-    private void refresh() {
-        table_filters.setItems(FXCollections.observableList(FILTERS));
+    private void initData() {
+        List<FilterRowDTO> groups = usecase.loadGroups();
+        in_sum.setText(SUM == null ? "" : SUM.toString());
+        table_filters.setItems(FXCollections.observableList(groups));
     }
 
     public static class FilterGroupData {
-        public static List<FilterRowDTO> FILTERS = new ArrayList<>();
-        public static Integer SUM = null;
-
-        public static void clear() {
-            FILTERS.clear();
-            SUM = null;
-        }
+        public static Integer CURRENT_FILTER_GROUP;
     }
 }
