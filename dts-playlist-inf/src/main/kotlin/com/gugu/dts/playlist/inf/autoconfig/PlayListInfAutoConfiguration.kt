@@ -1,6 +1,8 @@
 package com.gugu.dts.playlist.inf.autoconfig
 
+import com.gugu.dts.playlist.core.repository.FilterGroupRepository
 import com.gugu.dts.playlist.core.repository.MusicLibraryRepository
+import com.gugu.dts.playlist.inf.mapper.FilterGroupMapper
 import com.gugu.dts.playlist.inf.mapper.MusicLibraryMapper
 import com.gugu.dts.playlist.inf.mapper.SongMapper
 import org.mybatis.spring.annotation.MapperScan
@@ -9,6 +11,7 @@ import org.springframework.boot.autoconfigure.AutoConfigureAfter
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import repository.FilterGroupRepositoryImpl
 import repository.MusicLibraryRepositoryImpl
 
 @Configuration
@@ -21,4 +24,12 @@ class PlayListInfAutoConfiguration {
     fun musicLibraryRepository(libraryMapper: MusicLibraryMapper, songMapper: SongMapper): MusicLibraryRepository {
         return MusicLibraryRepositoryImpl(libraryMapper, songMapper)
     }
+
+    @Bean
+    @ConditionalOnMissingBean(FilterGroupRepository::class)
+    fun filterGroupRepository(filterGroupMapper: FilterGroupMapper): FilterGroupRepository {
+        return FilterGroupRepositoryImpl(filterGroupMapper)
+    }
+
+
 }

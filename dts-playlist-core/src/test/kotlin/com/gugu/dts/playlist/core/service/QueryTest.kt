@@ -1,6 +1,8 @@
 package com.gugu.dts.playlist.core.service
 
+import com.gugu.dts.playlist.core.entity.FilterGroup
 import com.gugu.dts.playlist.core.entity.MusicLibrary
+import com.gugu.dts.playlist.core.repository.FilterGroupRepository
 import com.gugu.dts.playlist.core.repository.MusicLibraryRepository
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -15,10 +17,16 @@ internal class QueryTest {
 
     @MockK
     lateinit var libraryRepo: MusicLibraryRepository
-
     @MockK
     lateinit var libMock: MusicLibrary
     lateinit var libMocks: List<MusicLibrary>
+
+    @MockK
+    lateinit var filterGroupRepo: FilterGroupRepository
+
+    @MockK
+    lateinit var groupMock: FilterGroup
+    lateinit var groupMocks: List<FilterGroup>
 
     lateinit var query: Query
 
@@ -32,7 +40,7 @@ internal class QueryTest {
         libMocks = listOf(libMock)
         every { libraryRepo.list() } returns libMocks
 
-        query = Query(libraryRepo)
+        query = Query(libraryRepo, filterGroupRepo)
     }
 
     @Test

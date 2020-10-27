@@ -2,6 +2,7 @@ package com.gugu.dts.playlist.core.entity
 
 import com.gugu.dts.playlist.api.`object`.ISong
 import com.gugu.dts.playlist.api.constants.Logic
+import com.gugu.dts.playlist.api.constants.PropertyProvider
 import com.gugu.dts.playlist.core.entity.filters.IntervalFilterImpl
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -23,8 +24,8 @@ internal class RuleTest {
     private val musicLibrary = MusicLibrary("test", "D:/test", songs, createAt = Date())
 
 
-    val bpmProvider = fun ISong.(): Double = this.bpm ?: 0.0
-    val lengthProvider = fun ISong.(): Double = this.trackLength.toDouble()
+    val bpmProvider = PropertyProvider.BPM
+    val lengthProvider = PropertyProvider.LENGTH
 
 
     /**
@@ -35,10 +36,10 @@ internal class RuleTest {
     fun test1() {
         val total = 5
         val filter = IntervalFilterImpl(100.0, 140.0, bpmProvider)
-        val group = FilterGroup(listOf(filter), Logic.AND, 2)
+        val group = FilterGroup(filters = listOf(filter), logic = Logic.AND, sum = 2, description = "")
         val rule = Rule(listOf(group), total)
         val list = rule.generatePlayList(musicLibrary)
-        val expact = ResultDTO(songs.filter { it.bpmProvider() >= 100.0 && it.bpmProvider() < 140.0 })
+        val expact = ResultDTO(songs.filter { it.(bpmProvider.function)() >= 100.0 && it.(bpmProvider.function)() < 140.0 })
 
         assertTrue(total >= list.songs.size)
         assertTrue(expact.allIn(list.songs))
@@ -53,13 +54,13 @@ internal class RuleTest {
         val total = 5
         val filter1 = IntervalFilterImpl(100.0, 140.0, bpmProvider)
         val filter2 = IntervalFilterImpl(100.0, 150.0, lengthProvider)
-        val group = FilterGroup(listOf(filter1, filter2), Logic.AND, 2)
+        val group = FilterGroup(filters = listOf(filter1, filter2), logic = Logic.AND, sum = 2, description = "")
         val rule = Rule(listOf(group), total)
         val list = rule.generatePlayList(musicLibrary)
 
         val expact = ResultDTO(songs.filter {
-            (it.bpmProvider() >= 100.0 && it.bpmProvider() < 140.0) &&
-                    (it.lengthProvider() >= 100.0 && it.lengthProvider() < 150.0)
+            (it.(bpmProvider.function)() >= 100.0 && it.(bpmProvider.function)() < 140.0) &&
+                    (it.(lengthProvider.function)() >= 100.0 && it.(lengthProvider.function)() < 150.0)
         })
 
         assertTrue(total >= list.songs.size)
@@ -75,12 +76,12 @@ internal class RuleTest {
         val total = 5
         val filter1 = IntervalFilterImpl(100.0, 120.0, bpmProvider)
         val filter2 = IntervalFilterImpl(120.0, 150.0, bpmProvider)
-        val group = FilterGroup(listOf(filter1, filter2), Logic.OR, 2)
+        val group = FilterGroup(filters = listOf(filter1, filter2), logic = Logic.OR, sum = 2, description = "")
         val rule = Rule(listOf(group), total)
         val list = rule.generatePlayList(musicLibrary)
 
         val expact = ResultDTO(songs.filter {
-            (it.bpmProvider() >= 100.0 && it.bpmProvider() < 140.0)
+            (it.(bpmProvider.function)() >= 100.0 && it.(bpmProvider.function)() < 140.0)
         })
 
         assertTrue(total >= list.songs.size)
@@ -97,8 +98,8 @@ internal class RuleTest {
         val total = 5
         val filter1 = IntervalFilterImpl(100.0, 120.0, bpmProvider)
         val filter2 = IntervalFilterImpl(120.0, 150.0, bpmProvider)
-        val group1 = FilterGroup(listOf(filter1), Logic.AND, 2)
-        val group2 = FilterGroup(listOf(filter2), Logic.AND, 2)
+        val group1 = FilterGroup(filters = listOf(filter1), logic = Logic.AND, sum = 2, description = "")
+        val group2 = FilterGroup(filters = listOf(filter2), logic = Logic.AND, sum = 2, description = "")
         val rule = Rule(listOf(group1, group2), total)
         val list = rule.generatePlayList(musicLibrary).songs
 

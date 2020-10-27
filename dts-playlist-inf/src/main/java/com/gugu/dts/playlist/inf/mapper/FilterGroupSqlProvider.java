@@ -32,6 +32,18 @@ public class FilterGroupSqlProvider {
             sql.VALUES("`sum`", "#{sum,jdbcType=INTEGER}");
         }
 
+        if (record.getLogic() != null) {
+            sql.VALUES("logic", "#{logic,jdbcType=INTEGER}");
+        }
+
+        if (record.getCreateAt() != null) {
+            sql.VALUES("create_at", "#{createAt,jdbcType=VARCHAR}");
+        }
+
+        if (record.getUpdateAt() != null) {
+            sql.VALUES("update_at", "#{updateAt,jdbcType=VARCHAR}");
+        }
+        
         return sql.toString();
     }
 
@@ -58,6 +70,18 @@ public class FilterGroupSqlProvider {
             sql.SET("`sum` = #{sum,jdbcType=INTEGER}");
         }
 
+        if (record.getLogic() != null) {
+            sql.SET("logic = #{logic,jdbcType=INTEGER}");
+        }
+
+        if (record.getCreateAt() != null) {
+            sql.SET("create_at = #{createAt,jdbcType=VARCHAR}");
+        }
+
+        if (record.getUpdateAt() != null) {
+            sql.SET("update_at = #{updateAt,jdbcType=VARCHAR}");
+        }
+        
         sql.WHERE("id = #{id,jdbcType=INTEGER}");
 
         return sql.toString();

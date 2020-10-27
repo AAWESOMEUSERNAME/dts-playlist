@@ -33,7 +33,7 @@ class MusicLibraryRepositoryImpl(
         libraryMapper.deleteByPrimaryKey(id)
     }
 
-    override fun find(id: Long): IMusicLibrary? {
+    override fun find(id: Int): IMusicLibrary? {
         return toModule(libraryMapper.selectByPrimaryKey(id.toInt()))
     }
 

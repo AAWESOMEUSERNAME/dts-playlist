@@ -3,6 +3,7 @@ package com.gugu.dts.playlist.core.service
 import com.gugu.dts.playlist.api.ICommander
 import com.gugu.dts.playlist.api.`object`.*
 import com.gugu.dts.playlist.api.`object`.filters.IntervalFilter
+import com.gugu.dts.playlist.api.constants.PropertyProvider
 import com.gugu.dts.playlist.core.entity.FilterGroup
 import com.gugu.dts.playlist.core.entity.Rule
 import com.gugu.dts.playlist.core.entity.filters.IntervalFilterImpl
@@ -34,11 +35,11 @@ class Commander(private val libraryRepo: MusicLibraryRepository) : ICommander {
         libraryRepo.updateSongPlayedTimes(id, newValue)
     }
 
-    override fun getIntervalFilter(min: Double, max: Double, provider: ISong.() -> Double): IntervalFilter {
+    override fun getIntervalFilter(min: Double, max: Double, provider: PropertyProvider): IntervalFilter {
         return IntervalFilterImpl(min, max, provider)
     }
 
     private fun toCore(dto: IFilterGroupDTO): IFilterGroup {
-        return FilterGroup(dto.filters, dto.logic, dto.sum)
+        return FilterGroup(filters = dto.filters, logic = dto.logic, sum = dto.sum, name = dto.name, description = dto.description)
     }
 }

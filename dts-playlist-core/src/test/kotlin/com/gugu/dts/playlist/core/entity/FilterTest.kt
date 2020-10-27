@@ -1,6 +1,6 @@
 package com.gugu.dts.playlist.core.entity
 
-import com.gugu.dts.playlist.api.`object`.ISong
+import com.gugu.dts.playlist.api.constants.PropertyProvider
 import com.gugu.dts.playlist.core.entity.filters.IntervalFilterImpl
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -21,7 +21,7 @@ internal class FilterTest {
 
     @Test
     fun bpmFilter() {
-        val getBpmFun = fun ISong.(): Double {return this.bpm?:0.0}
+        val getBpmFun = PropertyProvider.BPM
         assertEquals(2, IntervalFilterImpl(100.0, 115.0, getBpmFun).filter(songs).size)
         assertEquals(2, IntervalFilterImpl(100.0, 120.0, getBpmFun).filter(songs).size)
         assertEquals(3, IntervalFilterImpl(100.0, 130.0, getBpmFun).filter(songs).size)

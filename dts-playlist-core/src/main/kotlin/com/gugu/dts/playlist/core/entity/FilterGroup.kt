@@ -6,8 +6,11 @@ import com.gugu.dts.playlist.api.`object`.ISong
 import com.gugu.dts.playlist.api.constants.Logic
 
 class FilterGroup(
+        override val id: Int? = null,
         override val filters: List<IFilter>,
         override val logic: Boolean,
+        override val description: String,
+        override val name: String? = null,
         override val sum: Int
 ) : IFilterGroup {
 

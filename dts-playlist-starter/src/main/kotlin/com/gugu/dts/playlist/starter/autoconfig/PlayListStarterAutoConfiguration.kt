@@ -2,6 +2,7 @@ package com.gugu.dts.playlist.starter.autoconfig
 
 import com.gugu.dts.playlist.api.ICommander
 import com.gugu.dts.playlist.api.IQuery
+import com.gugu.dts.playlist.core.repository.FilterGroupRepository
 import com.gugu.dts.playlist.core.repository.MusicLibraryRepository
 import com.gugu.dts.playlist.core.service.Commander
 import com.gugu.dts.playlist.core.service.Query
@@ -24,8 +25,8 @@ class PlayListStarterAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(IQuery::class)
-    fun iQuery(libraryRepo: MusicLibraryRepository): IQuery {
-        return Query(libraryRepo)
+    fun iQuery(libraryRepo: MusicLibraryRepository, filterGroupRepo: FilterGroupRepository): IQuery {
+        return Query(libraryRepo, filterGroupRepo)
     }
 
 }

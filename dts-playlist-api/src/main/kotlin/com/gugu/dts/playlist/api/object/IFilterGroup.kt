@@ -1,6 +1,7 @@
 package com.gugu.dts.playlist.api.`object`
 
 interface IFilterGroup {
+    val id: Int?
     /**
      * filters
      */
@@ -13,5 +14,10 @@ interface IFilterGroup {
     val logic: Boolean
 
     val sum: Int
+
+    val description: String
+
+    val name: String?
+
     fun filter(songs: List<ISong>): List<ISong>
 }

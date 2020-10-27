@@ -30,4 +30,8 @@ interface IFilterGroupDTO{
     val logic: Boolean
 
     val sum: Int
+
+    val name: String?
+
+    val description: String
 }
