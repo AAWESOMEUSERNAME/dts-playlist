@@ -5,9 +5,7 @@ import com.gugu.dts.playlist.ui.dto.LibRowDTO;
 import com.gugu.dts.playlist.ui.usecase.GeneratorUsecase;
 import com.gugu.dts.playlist.ui.utils.AlertUtil;
 import com.gugu.dts.playlist.ui.utils.GeneratorNumberUtils;
-import com.gugu.dts.playlist.ui.view.ChooseLibDirView;
-import com.gugu.dts.playlist.ui.view.FilterGroupView;
-import com.gugu.dts.playlist.ui.view.LibSongsView;
+import com.gugu.dts.playlist.ui.view.*;
 import de.felixroske.jfxsupport.FXMLController;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -20,10 +18,8 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.gugu.dts.playlist.ui.controller.MainController.MainViewData.*;
 import static de.felixroske.jfxsupport.AbstractJavaFxApplicationSupport.getStage;
@@ -36,16 +32,7 @@ import static de.felixroske.jfxsupport.AbstractJavaFxApplicationSupport.getStage
 @FXMLController
 public class MainController implements Initializable {
 
-    private Stage rootStage;
-    private Stage chooseDirStage;
-    private Stage libSongsStage;
-    private Stage filterGroupStage;
-
-    private LibSongsController libSongsController;
     private GeneratorUsecase musicLibUsecase;
-    private ChooseLibDirView chooseLibDirView;
-    private LibSongsView playlistSongsView;
-    private FilterGroupView filterGroupView;
 
     @FXML
     private TextField in_totalNum;
@@ -68,16 +55,68 @@ public class MainController implements Initializable {
     @FXML
     private TableView<FilterGroupRowDTO> table_filter;
     @FXML
+    private TableColumn<FilterGroupRowDTO, String> col_filter_name;
+    @FXML
     private TableColumn<FilterGroupRowDTO, Integer> col_filter_songNum;
     @FXML
     private TableColumn<FilterGroupRowDTO, String> col_filter_condition;
 
-    public MainController(LibSongsController libSongsController, GeneratorUsecase musicLibUsecase, ChooseLibDirView chooseLibDirView, LibSongsView playlistSongsView, FilterGroupView filterGroupView) {
-        this.libSongsController = libSongsController;
+    public MainController(GeneratorUsecase musicLibUsecase,
+                          FilterGroupListView filterGroupListView,
+                          FilterGroupListController filterGroupListController,
+                          FilterGroupDetailView filterGroupDetailView,
+                          FilterGroupDetailController filterGroupDetailController,
+                          ImportLibView importLibView,
+                          LibSongsListView libSongsListView,
+                          LibSongsListController libSongsListController
+    ) {
         this.musicLibUsecase = musicLibUsecase;
-        this.chooseLibDirView = chooseLibDirView;
-        this.playlistSongsView = playlistSongsView;
-        this.filterGroupView = filterGroupView;
+        StageContainer.filterGroupDetailView = filterGroupDetailView;
+        StageContainer.filterGroupListController = filterGroupListController;
+        StageContainer.filterGroupListView = filterGroupListView;
+        StageContainer.filterGroupDetailController = filterGroupDetailController;
+        StageContainer.importLibView = importLibView;
+        StageContainer.libSongsListView = libSongsListView;
+        StageContainer.libSongsListController = libSongsListController;
+    }
+
+    @FXML
+    void addFilter(MouseEvent event) {
+        Stage filterGroupDetailStage = StageContainer.get(FilterGroupListView.class.getSimpleName());
+        if (filterGroupDetailStage.isShowing()) {
+            filterGroupDetailStage.close();
+        }
+        FilterGroupDetailController.FilterGroupData.clear();
+        filterGroupDetailStage.showAndWait();
+        refreshFilterGroups();
+    }
+
+    @FXML
+    void deleteFilter(MouseEvent event) {
+        if (CURRENT_GROUP == null) {
+            AlertUtil.warn("请选择要删除的过滤器");
+            return;
+        }
+        boolean comfirm = AlertUtil.comfirm("确认删除这个过滤器么？");
+        if (comfirm) {
+            GROUPS.remove(CURRENT_GROUP);
+            refreshFilterGroups();
+        }
+    }
+
+    @FXML
+    void alterFilter(MouseEvent event) {
+        if (CURRENT_GROUP == null) {
+            AlertUtil.warn("请选择要编辑的过滤器");
+            return;
+        }
+        FilterGroupDetailController.FilterGroupData.CURRENT_FILTER_GROUP = CURRENT_GROUP.getId();
+        Stage stage = StageContainer.get(FilterGroupDetailView.class.getSimpleName());
+        if (stage.isShowing()) {
+            stage.close();
+        }
+        stage.showAndWait();
+        refreshFilterGroups();
     }
 
     @FXML
@@ -85,11 +124,32 @@ public class MainController implements Initializable {
         if (CURRENT_LIB_ID == null) {
             AlertUtil.warn("请选择一个音乐库");
         }
-        LibSongsController.LibSongsViewData.libId = CURRENT_LIB_ID;
-        if (libSongsStage.isShowing()) {
-            libSongsStage.close();
+        LibSongsListController.LibSongsViewData.libId = CURRENT_LIB_ID;
+
+        Stage stage = StageContainer.get(LibSongsListView.class.getSimpleName());
+        if (stage.isShowing()) {
+            stage.close();
         }
-        libSongsStage.showAndWait();
+        stage.showAndWait();
+    }
+
+    @FXML
+    void deleteLib(MouseEvent event) {
+        boolean comfirm = AlertUtil.comfirm("确认删除这个音乐库么？");
+        if (comfirm) {
+            musicLibUsecase.deleteLib(CURRENT_LIB_ID);
+            initTableData();
+        }
+    }
+
+    @FXML
+    void importLib(MouseEvent event) {
+        Stage stage = StageContainer.get(ImportLibView.class.getSimpleName());
+        if (stage.isShowing()) {
+            return;
+        }
+        stage.showAndWait();
+        initTableData();
     }
 
     @FXML
@@ -114,75 +174,12 @@ public class MainController implements Initializable {
         AlertUtil.success("文件生成成功！路径：" + file.getAbsolutePath());
     }
 
-    @FXML
-    void deleteLib(MouseEvent event) {
-        boolean comfirm = AlertUtil.comfirm("确认删除这个音乐库么？");
-        if (comfirm) {
-            musicLibUsecase.deleteLib(CURRENT_LIB_ID);
-            initTableData();
-        }
-    }
-
-    @FXML
-    void addFilter(MouseEvent event) {
-        if (filterGroupStage.isShowing()) {
-            AlertUtil.warn("上一次新建还没有提交或关闭");
-            return;
-        }
-        FilterGroupController.FilterGroupData.clear();
-        filterGroupStage.showAndWait();
-        refreshFilterGroups();
-    }
-
-    @FXML
-    void deleteFilter(MouseEvent event) {
-        if (CURRENT_GROUP == null) {
-            AlertUtil.warn("请选择要删除的过滤器");
-            return;
-        }
-        boolean comfirm = AlertUtil.comfirm("确认删除这个过滤器么？");
-        if (comfirm) {
-            GROUPS.remove(CURRENT_GROUP);
-            refreshFilterGroups();
-        }
-    }
-
-    @FXML
-    void alterFilter(MouseEvent event) {
-        if (CURRENT_GROUP == null) {
-            AlertUtil.warn("请选择要编辑的过滤器");
-            return;
-        }
-    }
-
-    @FXML
-    void importLib(MouseEvent event) {
-        if (chooseDirStage.isShowing()) {
-            return;
-        }
-        chooseDirStage.showAndWait();
-        initTableData();
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        rootStage = getStage();
+        StageContainer.initStage();
         initCellValueFactory();
         initTableData();
         initTableListener();
-
-        chooseDirStage = new Stage();
-        chooseDirStage.initOwner(rootStage);
-        chooseDirStage.setScene(new Scene(chooseLibDirView.getView()));
-
-        libSongsStage = new Stage();
-        libSongsStage.initOwner(rootStage);
-        libSongsStage.setScene(new Scene(playlistSongsView.getView()));
-        libSongsStage.setOnShown(libSongsController);
-
-        filterGroupStage = new Stage();
-        filterGroupStage.initOwner(rootStage);
-        filterGroupStage.setScene(new Scene(filterGroupView.getView()));
     }
 
     private void initTableListener() {
@@ -210,6 +207,7 @@ public class MainController implements Initializable {
     }
 
     private void initCellValueFactory() {
+        col_filter_name.setCellValueFactory(new PropertyValueFactory<>(FilterGroupRowDTO.PROP_NAME));
         col_filter_condition.setCellValueFactory(new PropertyValueFactory<>(FilterGroupRowDTO.PROP_CONDITION));
         col_filter_songNum.setCellValueFactory(new PropertyValueFactory<>(FilterGroupRowDTO.PROP_NUM));
 
@@ -220,6 +218,7 @@ public class MainController implements Initializable {
     }
 
     public void refreshFilterGroups() {
+        GROUPS = GROUPS.stream().map(dto -> musicLibUsecase.loadGroup(dto.getId()).orElseThrow(() -> new RuntimeException("invalid group id:" + dto.getId()))).collect(Collectors.toList());
         table_filter.setItems(FXCollections.observableList(GROUPS));
     }
 
@@ -227,5 +226,50 @@ public class MainController implements Initializable {
         public static Integer CURRENT_LIB_ID;
         public static FilterGroupRowDTO CURRENT_GROUP;
         public static List<FilterGroupRowDTO> GROUPS = new ArrayList<>();
+    }
+
+    public static class StageContainer {
+        public static Map<String, Stage> STAGES = new HashMap<>();
+
+        static FilterGroupListController filterGroupListController;
+        static FilterGroupDetailController filterGroupDetailController;
+        static LibSongsListController libSongsListController;
+
+        static FilterGroupListView filterGroupListView;
+        static FilterGroupDetailView filterGroupDetailView;
+        static ImportLibView importLibView;
+        static LibSongsListView libSongsListView;
+
+        static void initStage() {
+            Stage root = getStage();
+            STAGES.put(MainView.class.getSimpleName(), root);
+
+            Stage filterGroupListStage = new Stage();
+            filterGroupListStage.initOwner(root);
+            filterGroupListStage.setScene(new Scene(filterGroupListView.getView()));
+            filterGroupListStage.setOnShown(filterGroupListController);
+            STAGES.put(FilterGroupListView.class.getSimpleName(), filterGroupListStage);
+
+            Stage filterGroupDetailStage = new Stage();
+            filterGroupDetailStage.initOwner(filterGroupListStage);
+            filterGroupDetailStage.setScene(new Scene(filterGroupDetailView.getView()));
+            filterGroupDetailStage.setOnShown(filterGroupDetailController);
+            STAGES.put(FilterGroupDetailView.class.getSimpleName(), filterGroupDetailStage);
+
+            Stage libSongsListStage = new Stage();
+            libSongsListStage.initOwner(root);
+            libSongsListStage.setScene(new Scene(libSongsListView.getView()));
+            libSongsListStage.setOnShown(libSongsListController);
+            STAGES.put(LibSongsListView.class.getSimpleName(), libSongsListStage);
+
+            Stage importLibStage = new Stage();
+            importLibStage.initOwner(root);
+            importLibStage.setScene(new Scene(importLibView.getView()));
+            STAGES.put(ImportLibView.class.getSimpleName(), importLibStage);
+        }
+
+        public static Stage get(String s) {
+            return STAGES.get(s);
+        }
     }
 }

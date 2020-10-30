@@ -82,7 +82,7 @@ public class SongsRowDTO {
         this.artist.set(artist);
     }
 
-    public long getId() {
+    public int getId() {
         return id.get();
     }
 

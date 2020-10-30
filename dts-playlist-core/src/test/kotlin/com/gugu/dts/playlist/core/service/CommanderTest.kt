@@ -3,6 +3,7 @@ package com.gugu.dts.playlist.core.service
 import com.gugu.dts.playlist.api.`object`.IMusicLibraryDTO
 import com.gugu.dts.playlist.api.`object`.ISongDTO
 import com.gugu.dts.playlist.core.entity.MusicLibrary
+import com.gugu.dts.playlist.core.repository.FilterGroupRepository
 import com.gugu.dts.playlist.core.repository.MusicLibraryRepository
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -19,6 +20,9 @@ internal class CommanderTest {
     lateinit var libraryRepository: MusicLibraryRepository
 
     @MockK
+    lateinit var groupRepository: FilterGroupRepository
+
+    @MockK
     lateinit var library: MusicLibrary
 
     lateinit var commander: Commander
@@ -26,7 +30,7 @@ internal class CommanderTest {
     @BeforeEach
     fun initMock() {
         every { libraryRepository.import(any()) } returns library
-        commander = Commander(libraryRepository)
+        commander = Commander(libraryRepository, groupRepository)
     }
 
     @Test

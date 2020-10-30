@@ -14,21 +14,28 @@ import java.util.List;
  */
 public class FilterGroupRowDTO {
 
+    public static final String PROP_NAME = "name";
     public static final String PROP_CONDITION = "condition";
     public static final String PROP_NUM = "songNum";
 
+    private SimpleStringProperty name;
     private SimpleStringProperty condition;
     private SimpleIntegerProperty songNum;
 
+
+    @Getter
+    @Setter
+    private Integer id;
     @Getter
     @Setter
     private List<FilterRowDTO> filters;
 
-    public FilterGroupRowDTO(String condition, Integer songNum) {
-        this(condition, songNum, new ArrayList<>());
+    public FilterGroupRowDTO(String name, String condition, Integer songNum) {
+        this(name, condition, songNum, new ArrayList<>());
     }
 
-    public FilterGroupRowDTO(String condition, Integer songNum, List<FilterRowDTO> filters) {
+    public FilterGroupRowDTO(String name, String condition, Integer songNum, List<FilterRowDTO> filters) {
+        this.name = new SimpleStringProperty(name);
         this.condition = new SimpleStringProperty(condition);
         this.songNum = new SimpleIntegerProperty(songNum);
         this.filters = filters;
@@ -56,5 +63,34 @@ public class FilterGroupRowDTO {
 
     public void setSongNum(int songNum) {
         this.songNum.set(songNum);
+    }
+
+    public String getName() {
+        return name.get();
+    }
+
+    public SimpleStringProperty nameProperty() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name.set(name);
+    }
+
+    public void addFilter(FilterRowDTO filter) {
+        filters.add(filter);
+        initCondition();
+    }
+
+    public void deleteFilter(FilterRowDTO filter) {
+        filters.remove(filter);
+        initCondition();
+    }
+
+    private void initCondition() {
+        this.condition = new SimpleStringProperty(filters.stream()
+                .map(it -> String.format("%s: [%s,%s)", it.getPropertyName(), it.getMin(), it.getMax()))
+                .reduce((s, s2) -> s + "," + s2)
+                .orElse("error"));
     }
 }

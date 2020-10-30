@@ -5,8 +5,8 @@ import de.felixroske.jfxsupport.FXMLView;
 
 /**
  * @author chenyiyang
- * @date 2020/9/30
+ * @date 2020/10/21
  */
-@FXMLView("/ChooseLibDir.fxml")
-public class ChooseLibDirView extends AbstractFxmlView {
+@FXMLView("/view/LibSongsList.fxml")
+public class LibSongsListView extends AbstractFxmlView {
 }

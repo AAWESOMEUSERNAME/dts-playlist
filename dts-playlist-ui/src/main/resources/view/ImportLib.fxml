@@ -3,7 +3,8 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="118.0" prefWidth="253.0" xmlns="http://javafx.com/javafx/8" fx:controller="com.gugu.dts.playlist.ui.controller.ChooseLibDirController">
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="118.0" prefWidth="253.0" xmlns="http://javafx.com/javafx/8"
+            fx:controller="com.gugu.dts.playlist.ui.controller.ImportLibController">
    <children>
       <GridPane layoutX="35.0" layoutY="35.0" prefHeight="105.0" prefWidth="233.0" AnchorPane.bottomAnchor="3.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
         <columnConstraints>

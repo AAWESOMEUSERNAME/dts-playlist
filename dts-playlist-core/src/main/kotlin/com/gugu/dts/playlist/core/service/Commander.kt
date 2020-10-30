@@ -7,15 +7,16 @@ import com.gugu.dts.playlist.api.constants.PropertyProvider
 import com.gugu.dts.playlist.core.entity.FilterGroup
 import com.gugu.dts.playlist.core.entity.Rule
 import com.gugu.dts.playlist.core.entity.filters.IntervalFilterImpl
+import com.gugu.dts.playlist.core.repository.FilterGroupRepository
 import com.gugu.dts.playlist.core.repository.MusicLibraryRepository
 
-class Commander(private val libraryRepo: MusicLibraryRepository) : ICommander {
+class Commander(private val libraryRepo: MusicLibraryRepository, private val groupRepo: FilterGroupRepository) : ICommander {
 
     override fun importLibray(library: IMusicLibraryDTO): IMusicLibrary {
         return libraryRepo.import(library)
     }
 
-    override fun deleteLibById(currentLibId: Long) {
+    override fun deleteLibById(currentLibId: Int) {
         return libraryRepo.deleteLibById(currentLibId)
     }
 
@@ -23,23 +24,39 @@ class Commander(private val libraryRepo: MusicLibraryRepository) : ICommander {
         return Rule(dto.filterGroups.map { toCore(it) }, dto.total, dto.fairlyMode)
     }
 
-    override fun updateSongPlayedTimesByOne(ids: LongArray) {
+    override fun updateSongPlayedTimesByOne(ids: IntArray) {
         libraryRepo.updateSongPlayedTimesByOne(ids)
     }
 
-    override fun resetLibPlayedTimes(libId: Long) {
+    override fun resetLibPlayedTimes(libId: Int) {
         libraryRepo.resetPlayedTimes(libId)
     }
 
-    override fun updateSongPlayedTimes(id: Long, newValue: Int) {
+    override fun updateSongPlayedTimes(id: Int, newValue: Int) {
         libraryRepo.updateSongPlayedTimes(id, newValue)
+    }
+
+    override fun updateFilterGroup(id: Int, dto: IFilterGroupDTO) {
+        groupRepo.updateFilterGroup(toCore(id, dto))
     }
 
     override fun getIntervalFilter(min: Double, max: Double, provider: PropertyProvider): IntervalFilter {
         return IntervalFilterImpl(min, max, provider)
     }
 
-    private fun toCore(dto: IFilterGroupDTO): IFilterGroup {
-        return FilterGroup(filters = dto.filters, logic = dto.logic, sum = dto.sum, name = dto.name, description = dto.description)
+    private fun toCore(dto: IFilterGroupDTO): FilterGroup {
+        return toCore(null, dto)
+    }
+
+    override fun deleteFilterGroupById(id: Int) {
+        groupRepo.deleteFilterGroupById(id)
+    }
+
+    override fun insertFilterGroup(dto: IFilterGroupDTO) {
+        groupRepo.insert(dto)
+    }
+
+    private fun toCore(id: Int?, dto: IFilterGroupDTO): FilterGroup {
+        return FilterGroup(id = id, filters = dto.filters, logic = dto.logic, sum = dto.sum, name = dto.name, description = dto.description)
     }
 }

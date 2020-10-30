@@ -19,8 +19,8 @@ class PlayListStarterAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(ICommander::class)
-    fun iCommander(libraryRepo: MusicLibraryRepository): ICommander {
-        return Commander(libraryRepo)
+    fun iCommander(libraryRepo: MusicLibraryRepository, filterGroupRepo: FilterGroupRepository): ICommander {
+        return Commander(libraryRepo, filterGroupRepo)
     }
 
     @Bean

@@ -24,7 +24,7 @@ import static de.felixroske.jfxsupport.AbstractJavaFxApplicationSupport.getStage
  * @date 2020/9/30
  */
 @FXMLController
-public class ChooseLibDirController implements Initializable {
+public class ImportLibController implements Initializable {
 
     private Stage rootStage;
     private GeneratorUsecase musicLibUsecase;
@@ -34,7 +34,7 @@ public class ChooseLibDirController implements Initializable {
     private TextField in_libName;
     private File selectedDirectory;
 
-    public ChooseLibDirController(GeneratorUsecase musicLibUsecase) {
+    public ImportLibController(GeneratorUsecase musicLibUsecase) {
         this.musicLibUsecase = musicLibUsecase;
     }
 

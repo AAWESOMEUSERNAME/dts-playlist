@@ -69,12 +69,12 @@ public interface SongMapper {
     void resetPlayedTimes(Integer libId);
 
     @Update({"update song", "set `used_times` = #{usedTimes,jdbcType=INTEGER}", "where `id` = #{id,jdbcType=INTEGER}"})
-    void updatePlayedTimes(@Param("id") long id, @Param("usedTimes") int usedTimes);
+    void updatePlayedTimes(@Param("id") int id, @Param("usedTimes") int usedTimes);
 
     @Update({"<script> update song", "set `used_times` = `used_times` +1", "where `id` in ",
             "<foreach collection='ids' item = 'item' open = '(' separator = ',' close = ')'>",
             "#{item}",
             "</foreach> </script>"
     })
-    void updatePlayedTimesByOne(@Param("ids") @NotNull long[] ids);
+    void updatePlayedTimesByOne(@Param("ids") @NotNull int[] ids);
 }

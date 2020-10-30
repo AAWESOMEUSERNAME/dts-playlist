@@ -7,6 +7,6 @@ import de.felixroske.jfxsupport.FXMLView;
  * @author chenyiyang
  * @date 2020/10/23
  */
-@FXMLView("/FilterGroup.fxml")
-public class FilterGroupView extends AbstractFxmlView {
+@FXMLView("/view/FilterGroupList.fxml")
+public class FilterGroupListView extends AbstractFxmlView {
 }

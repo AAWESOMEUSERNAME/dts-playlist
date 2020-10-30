@@ -5,6 +5,7 @@ import com.gugu.dts.playlist.api.object.IFilterGroupDTO;
 import com.gugu.dts.playlist.api.object.IRuleDTO;
 import lombok.Builder;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -40,6 +41,8 @@ public class RuleDTO implements IRuleDTO {
         private List<IFilter> filters;
         private boolean logic;
         private int sum;
+        private String name;
+        private String description;
 
         @NotNull
         @Override
@@ -55,6 +58,18 @@ public class RuleDTO implements IRuleDTO {
         @Override
         public int getSum() {
             return sum;
+        }
+
+        @Nullable
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @NotNull
+        @Override
+        public String getDescription() {
+            return description;
         }
     }
 

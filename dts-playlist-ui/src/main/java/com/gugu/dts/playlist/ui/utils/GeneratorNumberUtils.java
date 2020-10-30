@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 public class GeneratorNumberUtils {
 
     private static final Pattern DURATION = Pattern.compile("^(?<f>\\d+):?(?<s>\\d)*$");
-    private static final Pattern NUMBER = Pattern.compile("^\\d+$");
+    private static final Pattern NUMBER = Pattern.compile("^\\d+(.\\d)*$");
 
     public static boolean isNotNumber(String s) {
         if (s == null) {

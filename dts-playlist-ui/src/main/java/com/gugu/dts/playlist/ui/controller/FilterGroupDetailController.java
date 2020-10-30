@@ -9,6 +9,8 @@ import com.gugu.dts.playlist.ui.utils.GeneratorNumberUtils;
 import de.felixroske.jfxsupport.FXMLController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -16,6 +18,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.springframework.util.NumberUtils;
 import org.springframework.util.StringUtils;
 
@@ -26,20 +29,18 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-import static com.gugu.dts.playlist.ui.controller.FilterGroupController.FilterGroupData.FILTERS;
-import static com.gugu.dts.playlist.ui.controller.FilterGroupController.FilterGroupData.SUM;
+import static com.gugu.dts.playlist.ui.controller.FilterGroupDetailController.FilterGroupData.CURRENT_FILTER_GROUP;
+import static com.gugu.dts.playlist.ui.controller.FilterGroupDetailController.FilterGroupData.GROUP;
 
 /**
  * @author chenyiyang
  * @date 2020/10/23
  */
 @FXMLController
-public class FilterGroupController implements Initializable {
-
-
+public class FilterGroupDetailController implements Initializable, EventHandler<WindowEvent> {
     private GeneratorUsecase usecase;
 
-    public FilterGroupController(GeneratorUsecase usecase) {
+    public FilterGroupDetailController(GeneratorUsecase usecase) {
         this.usecase = usecase;
     }
 
@@ -52,6 +53,8 @@ public class FilterGroupController implements Initializable {
     private TextField in_max;
     @FXML
     private TextField in_sum;
+    @FXML
+    private TextField in_name;
 
     @FXML
     private TableView<FilterRowDTO> table_filters;
@@ -61,7 +64,6 @@ public class FilterGroupController implements Initializable {
     private TableColumn<FilterRowDTO, String> col_max;
     @FXML
     private TableColumn<FilterRowDTO, String> col_property;
-
 
     @FXML
     void addFilter(MouseEvent event) {
@@ -96,7 +98,7 @@ public class FilterGroupController implements Initializable {
             return;
         }
 
-        FILTERS.add(new FilterRowDTO(propertyName, min, max));
+        GROUP.addFilter(new FilterRowDTO(propertyName, min, max));
         refresh();
     }
 
@@ -134,36 +136,52 @@ public class FilterGroupController implements Initializable {
         if (selectedItem == null) {
             AlertUtil.warn("请选择要删除的行");
         }
-        FILTERS.remove(selectedItem);
+        GROUP.deleteFilter(selectedItem);
+        if (CURRENT_FILTER_GROUP != null) {
+            usecase.updateGroup(CURRENT_FILTER_GROUP, GROUP);
+        }
         refresh();
     }
 
     @FXML
     void commit(MouseEvent event) {
-        String sum = in_sum.getText();
-        if (GeneratorNumberUtils.isNotNumber(sum) || NumberUtils.parseNumber(sum, Integer.class).compareTo(0) <= 0) {
+        String sumStr = in_sum.getText();
+        if (GeneratorNumberUtils.isNotNumber(sumStr) || NumberUtils.parseNumber(sumStr, Integer.class).compareTo(0) <= 0) {
             AlertUtil.warn("请输入有效的数量");
             return;
         }
-        SUM = NumberUtils.parseNumber(sum, Integer.class);
+        int sum = GeneratorNumberUtils.toNumber(sumStr).intValue();
 
         ObservableList<FilterRowDTO> items = table_filters.getItems();
         if (items.size() == 0) {
             AlertUtil.warn("至少需要添加一个过滤条件");
             return;
         }
-        String condition = items.stream().map(it -> String.format("%s: [%s,%s)", it.getPropertyName(), it.getMin(), it.getMax())).reduce((s, s2) -> s + "," + s2).orElse("error");
-        FilterGroupRowDTO groupRowDTO = new FilterGroupRowDTO(condition, SUM, items);
-        MainController.MainViewData.GROUPS.add(groupRowDTO);
+        GROUP.setName(in_name.getText());
+        GROUP.setSongNum(sum);
+
+        if (CURRENT_FILTER_GROUP == null) {
+            usecase.insertGroup(GROUP);
+        } else {
+            usecase.updateGroup(CURRENT_FILTER_GROUP, GROUP);
+        }
+
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
+    }
+
+    @Override
+    public void handle(WindowEvent event) {
+        EventType<WindowEvent> eventType = event.getEventType();
+        if (eventType.equals(WindowEvent.WINDOW_SHOWN)) {
+            initTableData();
+        }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         List<String> items = Arrays.stream(FilterablePropertyEnum.values()).map(FilterablePropertyEnum::getPropName).collect(Collectors.toList());
         cob_property.setItems(FXCollections.observableList(items));
-
 
         col_min.setCellValueFactory(new PropertyValueFactory<>(FilterRowDTO.PROP_MIN));
         col_max.setCellValueFactory(new PropertyValueFactory<>(FilterRowDTO.PROP_MAX));
@@ -172,13 +190,28 @@ public class FilterGroupController implements Initializable {
         initTableData();
     }
 
-    private void initData() {
-        List<FilterRowDTO> groups = usecase.loadGroups();
-        in_sum.setText(SUM == null ? "" : SUM.toString());
-        table_filters.setItems(FXCollections.observableList(groups));
+    private void initTableData() {
+        if (CURRENT_FILTER_GROUP != null) {
+            GROUP = usecase.loadGroup(CURRENT_FILTER_GROUP).orElseThrow(() -> new RuntimeException("无效的groupId:" + CURRENT_FILTER_GROUP));
+        } else {
+            GROUP = new FilterGroupRowDTO(null, null, 0);
+        }
+        refresh();
+    }
+
+    private void refresh() {
+        in_sum.setText(String.valueOf(GROUP.getSongNum()));
+        in_name.setText(GROUP.getName());
+        table_filters.setItems(FXCollections.observableList(GROUP.getFilters()));
     }
 
     public static class FilterGroupData {
         public static Integer CURRENT_FILTER_GROUP;
+        public static FilterGroupRowDTO GROUP;
+
+        public static void clear() {
+            CURRENT_FILTER_GROUP = null;
+            GROUP = new FilterGroupRowDTO(null, null, 0);
+        }
     }
 }

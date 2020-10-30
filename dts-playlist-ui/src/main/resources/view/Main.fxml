@@ -71,10 +71,12 @@
                         <TableView fx:id="table_filter" editable="true" maxHeight="1.7976931348623157E308"
                                    prefHeight="171.0" prefWidth="611.0">
                             <columns>
-                                <TableColumn fx:id="col_filter_condition" editable="false" prefWidth="435.0"
+                                <TableColumn fx:id="col_filter_name" editable="false" prefWidth="96.0" resizable="false"
+                                             sortable="false" text="名称"/>
+                                <TableColumn fx:id="col_filter_condition" editable="false" prefWidth="406.0"
                                              resizable="false" sortable="false" text="过滤条件"/>
-                                <TableColumn fx:id="col_filter_songNum" editable="false" prefWidth="175.0"
-                                             resizable="false" sortable="false" text="歌曲数量"/>
+                                <TableColumn fx:id="col_filter_songNum" editable="false" maxWidth="558.0"
+                                             prefWidth="108.0" resizable="false" sortable="false" text="歌曲数量"/>
                             </columns>
                         </TableView>
                     </content>

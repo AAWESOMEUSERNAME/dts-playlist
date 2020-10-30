@@ -5,6 +5,7 @@ import com.gugu.dts.playlist.api.IQuery;
 import com.gugu.dts.playlist.api.constants.Logic;
 import com.gugu.dts.playlist.api.constants.PropertyProvider;
 import com.gugu.dts.playlist.api.object.*;
+import com.gugu.dts.playlist.api.object.filters.IntervalFilter;
 import com.gugu.dts.playlist.ui.AppProperties;
 import com.gugu.dts.playlist.ui.constants.FilterablePropertyEnum;
 import com.gugu.dts.playlist.ui.dto.*;
@@ -172,13 +173,13 @@ public class GeneratorUsecase {
                 }
                 return commander.getIntervalFilter(dto.getMinD(), dto.getMaxD(), provider);
             }).collect(Collectors.toList());
-            return FilterGroupDTO.builder().filters(filters).logic(Logic.AND).sum(songNum).build();
+            return FilterGroupDTO.builder().filters(filters).logic(Logic.AND).name(group.getName()).description(group.getCondition()).sum(songNum).build();
         }).collect(Collectors.toList());
 
         RuleDTO ruleDTO = RuleDTO.builder().fairlyMode(fairly).total(total.intValue()).filterGroups(groupDTOs).build();
         IRule rule = commander.createRule(ruleDTO);
         IPlayList iPlayList = rule.generatePlayList(lib);
-        commander.updateSongPlayedTimesByOne(iPlayList.getSongs().stream().mapToLong(it -> it.getId().longValue()).toArray());
+        commander.updateSongPlayedTimesByOne(iPlayList.getSongs().stream().mapToInt(ISong::getId).toArray());
         return iPlayList.toFile(appProperties.getOutPutFile());
     }
 
@@ -186,11 +187,96 @@ public class GeneratorUsecase {
         commander.resetLibPlayedTimes(libId);
     }
 
-    public void updateSongPlayedTimes(long id, Integer newValue) {
+    public void updateSongPlayedTimes(int id, Integer newValue) {
         commander.updateSongPlayedTimes(id, newValue);
     }
 
-    public List<FilterRowDTO> loadGroups() {
-        return query.listFilterGroups();
+    public List<FilterGroupRowDTO> loadGroups() {
+        return query.listFilterGroups().stream().map(this::toDto).collect(Collectors.toList());
+    }
+
+    public Optional<FilterGroupRowDTO> loadGroup(int id) {
+        return Optional.ofNullable(query.fetchFilterGroupById(id)).map(this::toDto);
+    }
+
+    private FilterRowDTO toDto(IFilter filter) {
+        if (filter instanceof IntervalFilter) {
+            IntervalFilter f = (IntervalFilter) filter;
+            String propName = null;
+            switch (f.getProvider()) {
+                case BPM:
+                    propName = FilterablePropertyEnum.BPM.getPropName();
+                    break;
+                case LENGTH:
+                    propName = FilterablePropertyEnum.TRACK_LENGTH.getPropName();
+            }
+            return new FilterRowDTO(propName, String.valueOf(f.getMin()), String.valueOf(f.getMax()));
+        }
+        throw new RuntimeException("unknown filter type");
+    }
+
+    private FilterGroupRowDTO toDto(IFilterGroup group) {
+        FilterGroupRowDTO dto = new FilterGroupRowDTO(group.getName(), group.getDescription(), group.getSum(), group.getFilters().stream().map(this::toDto).collect(Collectors.toList()));
+        dto.setId(group.getId());
+        return dto;
+    }
+
+    public void updateGroup(int id, FilterGroupRowDTO dto) {
+        commander.updateFilterGroup(id, toApi(dto));
+    }
+
+    private IFilterGroupDTO toApi(FilterGroupRowDTO dto) {
+        return new IFilterGroupDTO() {
+            @NotNull
+            @Override
+            public List<IFilter> getFilters() {
+                return dto.getFilters().stream().map(GeneratorUsecase.this::toApi).collect(Collectors.toList());
+            }
+
+            @Override
+            public boolean getLogic() {
+                return Logic.AND;
+            }
+
+            @Override
+            public int getSum() {
+                return dto.getSongNum();
+            }
+
+            @Nullable
+            @Override
+            public String getName() {
+                return dto.getName();
+            }
+
+            @NotNull
+            @Override
+            public String getDescription() {
+                return dto.getCondition();
+            }
+        };
+    }
+
+    private IFilter toApi(FilterRowDTO dto) {
+        PropertyProvider provider;
+        switch (FilterablePropertyEnum.ofProp(dto.getPropertyName())) {
+            case BPM:
+                provider = PropertyProvider.BPM;
+                break;
+            case TRACK_LENGTH:
+                provider = PropertyProvider.LENGTH;
+                break;
+            default:
+                throw new RuntimeException("invalid filter prop");
+        }
+        return commander.getIntervalFilter(dto.getMinD(), dto.getMaxD(), provider);
+    }
+
+    public void deleteGroup(Integer id) {
+        commander.deleteFilterGroupById(id);
+    }
+
+    public void insertGroup(FilterGroupRowDTO group) {
+        commander.insertFilterGroup(toApi(group));
     }
 }

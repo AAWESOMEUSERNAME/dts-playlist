@@ -8,9 +8,9 @@ interface MusicLibraryRepository {
     fun import(library: IMusicLibraryDTO): MusicLibrary
     fun fetchLibraryByName(name: String): MusicLibrary?
     fun list(): List<MusicLibrary>
-    fun deleteLibById(currentLibId: Long)
+    fun deleteLibById(currentLibId: Int)
     fun find(id: Int): IMusicLibrary?
-    fun resetPlayedTimes(libId: Long)
-    fun updateSongPlayedTimes(id: Long, newValue: Int)
-    fun updateSongPlayedTimesByOne(ids: LongArray)
+    fun resetPlayedTimes(libId: Int)
+    fun updateSongPlayedTimes(id: Int, newValue: Int)
+    fun updateSongPlayedTimesByOne(ids: IntArray)
 }

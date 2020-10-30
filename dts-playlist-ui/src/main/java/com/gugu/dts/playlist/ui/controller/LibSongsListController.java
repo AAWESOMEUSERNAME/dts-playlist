@@ -22,18 +22,18 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static com.gugu.dts.playlist.ui.controller.LibSongsController.LibSongsViewData.libId;
+import static com.gugu.dts.playlist.ui.controller.LibSongsListController.LibSongsViewData.libId;
 
 /**
  * @author chenyiyang
  * @date 2020/10/21
  */
 @FXMLController
-public class LibSongsController implements Initializable, EventHandler<WindowEvent> {
+public class LibSongsListController implements Initializable, EventHandler<WindowEvent> {
 
     private GeneratorUsecase musicLibUsecase;
 
-    public LibSongsController(GeneratorUsecase musicLibUsecase) {
+    public LibSongsListController(GeneratorUsecase musicLibUsecase) {
         this.musicLibUsecase = musicLibUsecase;
     }
 

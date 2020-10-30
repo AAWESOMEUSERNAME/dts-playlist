@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.gugu.dts.playlist.ui.controller.FilterGroupListController">
+    <children>
+        <BorderPane prefHeight="400.0" prefWidth="600.0">
+            <top>
+                <GridPane BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="394.0" minWidth="10.0"
+                                           prefWidth="389.0"/>
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="152.0" minWidth="10.0"
+                                           prefWidth="50.0"/>
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="128.0" minWidth="10.0"
+                                           prefWidth="50.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <children>
+                        <Button mnemonicParsing="false" onMouseClicked="#addFilterGroup" text="添加"
+                                GridPane.columnIndex="1"/>
+                        <Button mnemonicParsing="false" onMouseClicked="#alterFilterGroup" text="编辑"
+                                GridPane.columnIndex="2"/>
+                        <Button mnemonicParsing="false" onMouseClicked="#deleteFilterGroup" text="删除"
+                                GridPane.columnIndex="3"/>
+                    </children>
+                    <BorderPane.margin>
+                        <Insets right="10.0"/>
+                    </BorderPane.margin>
+                </GridPane>
+            </top>
+            <center>
+                <TableView fx:id="table_groups" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                    <columns>
+                        <TableColumn fx:id="col_name" prefWidth="75.0" text="名称"/>
+                        <TableColumn fx:id="col_condition" prefWidth="394.0" text="条件"/>
+                        <TableColumn fx:id="col_sum" prefWidth="130.0" text="歌曲数量"/>
+                    </columns>
+                </TableView>
+            </center>
+        </BorderPane>
+    </children>
+</AnchorPane>

@@ -27,7 +27,7 @@ class MusicLibraryRepositoryImpl(
         return toModule(libraryMapper.selectByPrimaryKey(entity.id))!!
     }
 
-    override fun deleteLibById(currentLibId: Long) {
+    override fun deleteLibById(currentLibId: Int) {
         val id = currentLibId.toInt()
         songMapper.deleteByLibId(id)
         libraryMapper.deleteByPrimaryKey(id)
@@ -45,16 +45,16 @@ class MusicLibraryRepositoryImpl(
         return libraryMapper.list().map { toModule(it)!! }
     }
 
-    override fun updateSongPlayedTimes(id: Long, newValue: Int) {
+    override fun updateSongPlayedTimes(id: Int, newValue: Int) {
         songMapper.updatePlayedTimes(id, newValue)
     }
 
-    override fun resetPlayedTimes(libId: Long) {
+    override fun resetPlayedTimes(libId: Int) {
         songMapper.resetPlayedTimes(libId.toInt())
     }
 
-    override fun updateSongPlayedTimesByOne(ids: LongArray) {
-        songMapper.updatePlayedTimesByOne(ids)
+    override fun updateSongPlayedTimesByOne(ids: IntArray) {
+        if (ids.isNotEmpty()) songMapper.updatePlayedTimesByOne(ids)
     }
 
     private fun toModule(entity: com.gugu.dts.playlist.inf.entity.MusicLibrary?): MusicLibrary? {

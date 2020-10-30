@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <AnchorPane prefHeight="250.0" prefWidth="559.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.gugu.dts.playlist.ui.controller.FilterGroupController">
+            fx:controller="com.gugu.dts.playlist.ui.controller.FilterGroupDetailController">
     <children>
         <BorderPane prefHeight="250.0" prefWidth="559.0">
             <center>
@@ -67,9 +67,13 @@
                     <columnConstraints>
                         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="198.0" minWidth="10.0"
                                            prefWidth="181.0"/>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="268.0" minWidth="10.0" prefWidth="47.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="268.0" minWidth="10.0" prefWidth="93.0"/>
                         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="337.0" minWidth="10.0"
-                                           prefWidth="331.0"/>
+                                           prefWidth="110.0"/>
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="337.0" minWidth="10.0"
+                                           prefWidth="105.0"/>
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="337.0" minWidth="10.0"
+                                           prefWidth="118.0"/>
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
@@ -78,7 +82,9 @@
                         <Label text="该组过滤器筛选出的数量："/>
                         <TextField fx:id="in_sum" prefHeight="23.0" prefWidth="82.0" GridPane.columnIndex="1"/>
                         <Button mnemonicParsing="false" onMouseClicked="#commit" prefHeight="27.0" prefWidth="69.0"
-                                text="提交" GridPane.columnIndex="2"/>
+                                text="提交" GridPane.columnIndex="4"/>
+                        <Label text="名称：" GridPane.columnIndex="2"/>
+                        <TextField fx:id="in_name" prefHeight="23.0" prefWidth="82.0" GridPane.columnIndex="3"/>
                     </children>
                     <BorderPane.margin>
                         <Insets bottom="10.0" left="10.0" right="10.0"/>
