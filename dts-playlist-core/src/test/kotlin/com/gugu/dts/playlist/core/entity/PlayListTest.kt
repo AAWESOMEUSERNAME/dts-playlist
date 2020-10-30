@@ -38,7 +38,7 @@ internal class PlayListTest {
     @Test
     fun add() {
         playList.add(Song("test2.mp3", "D:/test2.mp3"))
-        assertTrue { playList.songs.size == 2 }
+        assertTrue { playList.songs.size == 3 }
     }
 
     @Test
