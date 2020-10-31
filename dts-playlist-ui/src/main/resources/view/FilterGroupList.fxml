@@ -10,9 +10,9 @@
             <top>
                 <GridPane BorderPane.alignment="CENTER">
                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="276.0" minWidth="10.0" prefWidth="276.0"/>
                         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="394.0" minWidth="10.0"
-                                           prefWidth="389.0"/>
+                                           prefWidth="214.0"/>
                         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="152.0" minWidth="10.0"
                                            prefWidth="50.0"/>
                         <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="128.0" minWidth="10.0"
@@ -28,6 +28,11 @@
                                 GridPane.columnIndex="2"/>
                         <Button mnemonicParsing="false" onMouseClicked="#deleteFilterGroup" text="删除"
                                 GridPane.columnIndex="3"/>
+                        <Label prefHeight="15.0" prefWidth="215.0" text="双击想要使用的过滤器以加入列表">
+                            <GridPane.margin>
+                                <Insets left="10.0"/>
+                            </GridPane.margin>
+                        </Label>
                     </children>
                     <BorderPane.margin>
                         <Insets right="10.0"/>

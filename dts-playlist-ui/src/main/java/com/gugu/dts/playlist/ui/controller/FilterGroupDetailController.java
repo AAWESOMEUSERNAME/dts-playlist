@@ -84,7 +84,8 @@ public class FilterGroupDetailController implements Initializable, EventHandler<
             AlertUtil.warn("请输入最大值");
             return;
         }
-
+        min = min.replaceAll("：", ":");
+        max = max.replaceAll("：", ":");
         boolean result = false;
         switch (FilterablePropertyEnum.ofProp(propertyName)) {
             case BPM:
