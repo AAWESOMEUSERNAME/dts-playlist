@@ -13,7 +13,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
  * @date 2020/9/28
  */
 @SpringBootApplication
-@Slf4j
+@Slf4j(topic = "app")
 @EnableConfigurationProperties(AppProperties.class)
 public class PlayListGeneratorApp extends AbstractJavaFxApplicationSupport {
 
