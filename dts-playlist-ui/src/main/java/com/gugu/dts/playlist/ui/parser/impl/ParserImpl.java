@@ -33,13 +33,14 @@ public class ParserImpl implements IParser {
             int trackLength = f.getAudioHeader().getTrackLength();
             String bpm = tag.getFirst(FieldKey.BPM);
             log.debug("parsing file BPM: {}", bpm);
-            if (StringUtils.isEmpty(bpm)) {
-                log.warn("--------- file BPM is empty! ---------");
+            final Pattern pattern = Pattern.compile("^\\d+(\\.\\d+)*$");
+            if (pattern.matcher(bpm).find()) {
+                log.warn("--------- file BPM is illegal! ---------");
             }
             return Optional.of(new IMusicFile() {
                 @Override
                 public double bpm() {
-                    return StringUtils.isEmpty(bpm) ? 0.0 : Double.parseDouble(bpm);
+                    return pattern.matcher(bpm).find() ? Double.parseDouble(bpm) : 0.0;
                 }
 
                 @Override
@@ -61,6 +62,7 @@ public class ParserImpl implements IParser {
                     }
                     return artists;
                 }
+
                 @Override
                 public String album() {
                     return album;
